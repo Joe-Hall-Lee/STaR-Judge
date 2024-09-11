@@ -24,7 +24,7 @@ def batched_evaluation(
         torch.cuda.empty_cache()
         print("Start loading VLLM model!")
         model = vllm.LLM(model=args.model_name_or_path,
-                         gpu_memory_utilization=0.7)
+                         gpu_memory_utilization=0.4)
         print("VLLM model loaded!")
 
     pred_list = model.generate(prompts, sampling_params)
@@ -62,8 +62,7 @@ def calculate_consistency(subset, temperature=0.0, top_p=1.0):
                 total += item
             else:
                 total += item.logprob
-        # pred_scores.append(total / len(pl))
-        pred_scores.append(total)
+        pred_scores.append(total / len(pl))
 
     # Split the scores for response1 and response2
     pred_scores_a = pred_scores[0::2]
