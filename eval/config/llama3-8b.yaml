@@ -1,7 +1,7 @@
 prompt: llmbar
 vllm_args:
   model_args:
-    model: /H1/zhouhongli/JudgePO/LLaMA-Factory/output/Llama-3-8B-Instruct-helpsteer_orpo_0.2_lr_1e-6
+    model: /H1/zhouhongli/JudgePO/LLaMA-Factory/output/Llama-3-8B-Instruct-helpsteer_simpo_2_1.6_lr_1e-6
     dtype: float16
   sampling_params:
     temperature: 0
