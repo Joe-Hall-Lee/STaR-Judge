@@ -1,23 +1,23 @@
 ### model
-model_name_or_path: /H1/zhouhongli/JudgePO/models/Llama-2-7b-chat-hf
+model_name_or_path: /H1/zhouhongli/JudgePO/models/Llama-2-13B-chat
 
 ### method
 stage: dpo
 do_train: true
 finetuning_type: full
-pref_beta: 0.2
-# simpo_gamma: 1.6
-pref_loss: orpo  # choices: [sigmoid (dpo), orpo, simpo]
+pref_beta: 2.0
+simpo_gamma: 1.6
+pref_loss: simpo  # choices: [sigmoid (dpo), orpo, simpo]
 
 ### dataset
-dataset: offsetbias_dpo
+dataset: helpsteer_dpo
 template: llama2
 cutoff_len: 1024
 max_samples: 1000000
 overwrite_cache: true
 
 ### output
-output_dir: /H1/zhouhongli/JudgePO/LLaMA-Factory/output/Llama-2-7b-chat-hf-offsetbias_orpo_0.2
+output_dir: /H1/zhouhongli/JudgePO/LLaMA-Factory/output/Llama-2-13B-chat-helpsteer_simpo_2.0_1.6_lr_1e-5_epoch_3
 logging_steps: 1
 save_steps: 1000
 plot_loss: true
@@ -25,7 +25,7 @@ overwrite_output_dir: true
 
 ### train
 per_device_train_batch_size: 4
-gradient_accumulation_steps: 8
+gradient_accumulation_steps: 16
 learning_rate: 1.0e-5
 num_train_epochs: 3.0
 lr_scheduler_type: cosine

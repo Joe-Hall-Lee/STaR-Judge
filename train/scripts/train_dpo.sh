@@ -1,4 +1,4 @@
-CUDA_VISIBLE_DEVICES="6,7" accelerate launch \
+CUDA_VISIBLE_DEVICES="0,7" accelerate launch \
     --config_file configs/accelerate/fsdp_config.yaml \
-    --main_process_port=12547 \
-    src/train.py configs/llama3_full_dpo.yaml
+    --main_process_port=12548 \
+    src/train.py configs/llama2_full_dpo.yaml

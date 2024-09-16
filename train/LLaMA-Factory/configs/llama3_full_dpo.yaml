@@ -6,7 +6,7 @@ stage: dpo
 do_train: true
 finetuning_type: full
 pref_beta: 2.5
-simpo_gamma: 1.4
+simpo_gamma: 0.3
 pref_loss: simpo  # choices: [sigmoid (dpo), orpo, simpo]
 
 ### dataset
@@ -17,7 +17,7 @@ max_samples: 1000000
 overwrite_cache: true
 
 ### output
-output_dir: /H1/zhouhongli/JudgePO/LLaMA-Factory/output/Llama-3-8B-Instruct-helpsteer_simpo_2.5_1.4_lr_1e-6_epoch_1
+output_dir: /H1/zhouhongli/JudgePO/LLaMA-Factory/output/Llama-3-8B-Instruct-helpsteer_simpo_2.5_0.3_lr_5e-7_epoch_1
 logging_steps: 1
 save_steps: 1000
 plot_loss: true
@@ -25,8 +25,8 @@ overwrite_output_dir: true
 
 ### train
 per_device_train_batch_size: 2
-gradient_accumulation_steps: 32
-learning_rate: 1.0e-6
+gradient_accumulation_steps: 16
+learning_rate: 5.0e-7
 num_train_epochs: 1.0
 lr_scheduler_type: cosine
 warmup_ratio: 0.1
