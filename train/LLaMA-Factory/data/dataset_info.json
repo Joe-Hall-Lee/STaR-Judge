@@ -34,5 +34,8 @@
     },
     "helpsteer_sft": {
         "file_name": "helpsteer_sft.json"
+    },
+    "helpsteer_et": {
+        "file_name": "helpsteer_et.json"
     }
 }

@@ -77,36 +77,10 @@ class VllmModule(InferenceModule):
         print(self.sampling_params)
 
     def generate(self, conversation_list: list) -> list:
-        if "prometheus" in self.model_name:
-            from fastchat.conversation import get_conv_template
 
-            def _get_conversation_prompt(messages):
-                """
-                From filled prompt, convert it into llama-2 conversation prompt
-                """
-                conv = get_conv_template("mistral")
-
-                for message in messages:
-                    if message["role"] == "system":
-                        conv.set_system_message(message["content"])
-                    elif message["role"] == "user":
-                        conv.append_message(conv.roles[0], message["content"])
-
-                conv.append_message(conv.roles[1], None)
-                prompt = conv.get_prompt()
-                return prompt
-            inputs = [_get_conversation_prompt(conversation).strip() for conversation in conversation_list]
-            outputs = self.model.generate(inputs, sampling_params=self.sampling_params)
-
-        elif "PandaLM" in self.model_name:
-            inputs = [conversation[0]['content'] for conversation in conversation_list]
-            outputs = self.model.generate(inputs, sampling_params=self.sampling_params)
-
-        else:
-            # llama3 style
-            prompt_token_ids = [self.tokenizer.apply_chat_template(
-                conversation, add_generation_prompt=True) for conversation in conversation_list]
-            outputs = self.model.generate(prompt_token_ids=prompt_token_ids, sampling_params=self.sampling_params)
+        prompt_token_ids = [self.tokenizer.apply_chat_template(
+            conversation, add_generation_prompt=True) for conversation in conversation_list]
+        outputs = self.model.generate(prompt_token_ids=prompt_token_ids, sampling_params=self.sampling_params)
 
         generated_texts = [output.outputs[0].text.strip() for output in outputs]
         return generated_texts

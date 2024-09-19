@@ -334,11 +334,12 @@ def prepare_inputs(records, tokenizer, mode="a2a"):
         system_message = ABS_SYSTEM_PROMPT
         for record in records:
             # TODO: Check if tokenizer.chat_template is correct or tokenizer.default_chat_template is correct
-            if "system" in tokenizer.chat_template:
-                messages = [
-                    {"role": "system", "content": system_message},
-                    {"role": "user", "content": record["instruction"]},
-                ]
+            if tokenizer.chat_template is not None: 
+                if "system" in tokenizer.chat_template:
+                    messages = [
+                        {"role": "system", "content": system_message},
+                        {"role": "user", "content": record["instruction"]},
+                    ]
             else:
                 messages = [
                     {"role": "user", "content": system_message + record["instruction"]},

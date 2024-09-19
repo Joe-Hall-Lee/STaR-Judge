@@ -1,0 +1,192 @@
+{
+    "llmbar": {
+        "Natural": {
+            "single_total": 200,
+            "single_correct": 118,
+            "single_accuracy": 59.0,
+            "pair_total": 100,
+            "pair_correct": 20,
+            "pair_accuracy": 20.0,
+            "pair_agree": 22,
+            "pair_agreement_rate": 22.0
+        },
+        "Neighbor": {
+            "single_total": 268,
+            "single_correct": 101,
+            "single_accuracy": 37.69,
+            "pair_total": 134,
+            "pair_correct": 3,
+            "pair_accuracy": 2.24,
+            "pair_agree": 39,
+            "pair_agreement_rate": 29.1
+        },
+        "GPTInst": {
+            "single_total": 184,
+            "single_correct": 81,
+            "single_accuracy": 44.02,
+            "pair_total": 92,
+            "pair_correct": 5,
+            "pair_accuracy": 5.43,
+            "pair_agree": 21,
+            "pair_agreement_rate": 22.83
+        },
+        "GPTOut": {
+            "single_total": 94,
+            "single_correct": 45,
+            "single_accuracy": 47.87,
+            "pair_total": 47,
+            "pair_correct": 4,
+            "pair_accuracy": 8.51,
+            "pair_agree": 10,
+            "pair_agreement_rate": 21.28
+        },
+        "Manual": {
+            "single_total": 92,
+            "single_correct": 37,
+            "single_accuracy": 40.22,
+            "pair_total": 46,
+            "pair_correct": 2,
+            "pair_accuracy": 4.35,
+            "pair_agree": 13,
+            "pair_agreement_rate": 28.26
+        }
+    },
+    "hhh": {
+        "helpful": {
+            "single_total": 118,
+            "single_correct": 82,
+            "single_accuracy": 69.49,
+            "pair_total": 59,
+            "pair_correct": 27,
+            "pair_accuracy": 45.76,
+            "pair_agree": 31,
+            "pair_agreement_rate": 52.54
+        },
+        "honest": {
+            "single_total": 122,
+            "single_correct": 74,
+            "single_accuracy": 60.66,
+            "pair_total": 61,
+            "pair_correct": 29,
+            "pair_accuracy": 47.54,
+            "pair_agree": 45,
+            "pair_agreement_rate": 73.77
+        },
+        "harmless": {
+            "single_total": 116,
+            "single_correct": 92,
+            "single_accuracy": 79.31,
+            "pair_total": 58,
+            "pair_correct": 40,
+            "pair_accuracy": 68.97,
+            "pair_agree": 46,
+            "pair_agreement_rate": 79.31
+        },
+        "other": {
+            "single_total": 86,
+            "single_correct": 61,
+            "single_accuracy": 70.93,
+            "pair_total": 43,
+            "pair_correct": 23,
+            "pair_accuracy": 53.49,
+            "pair_agree": 28,
+            "pair_agreement_rate": 65.12
+        }
+    },
+    "mtbench": {
+        "human": {
+            "single_total": 2568,
+            "single_correct": 1523,
+            "single_accuracy": 59.31,
+            "pair_total": 1284,
+            "pair_correct": 276,
+            "pair_accuracy": 21.5,
+            "pair_agree": 313,
+            "pair_agreement_rate": 24.38
+        },
+        "gpt4_pair": {
+            "single_total": 1764,
+            "single_correct": 1085,
+            "single_accuracy": 61.51,
+            "pair_total": 882,
+            "pair_correct": 215,
+            "pair_accuracy": 24.38,
+            "pair_agree": 227,
+            "pair_agreement_rate": 25.74
+        }
+    },
+    "biasbench": {
+        "length bias": {
+            "single_total": 34,
+            "single_correct": 13,
+            "single_accuracy": 38.24,
+            "pair_total": 17,
+            "pair_correct": 0,
+            "pair_accuracy": 0.0,
+            "pair_agree": 4,
+            "pair_agreement_rate": 23.53
+        },
+        "concreteness": {
+            "single_total": 28,
+            "single_correct": 16,
+            "single_accuracy": 57.14,
+            "pair_total": 14,
+            "pair_correct": 4,
+            "pair_accuracy": 28.57,
+            "pair_agree": 6,
+            "pair_agreement_rate": 42.86
+        },
+        "empty reference": {
+            "single_total": 26,
+            "single_correct": 10,
+            "single_accuracy": 38.46,
+            "pair_total": 13,
+            "pair_correct": 1,
+            "pair_accuracy": 7.69,
+            "pair_agree": 5,
+            "pair_agreement_rate": 38.46
+        },
+        "content_continuation": {
+            "single_total": 24,
+            "single_correct": 15,
+            "single_accuracy": 62.5,
+            "pair_total": 12,
+            "pair_correct": 3,
+            "pair_accuracy": 25.0,
+            "pair_agree": 3,
+            "pair_agreement_rate": 25.0
+        },
+        "nested_instruction": {
+            "single_total": 24,
+            "single_correct": 8,
+            "single_accuracy": 33.33,
+            "pair_total": 12,
+            "pair_correct": 1,
+            "pair_accuracy": 8.33,
+            "pair_agree": 6,
+            "pair_agreement_rate": 50.0
+        },
+        "familiar knowledge preference bias": {
+            "single_total": 24,
+            "single_correct": 9,
+            "single_accuracy": 37.5,
+            "pair_total": 12,
+            "pair_correct": 1,
+            "pair_accuracy": 8.33,
+            "pair_agree": 5,
+            "pair_agreement_rate": 41.67
+        }
+    },
+    "judgelm": {
+        "judgelm": {
+            "single_total": 9260,
+            "single_correct": 5824,
+            "single_accuracy": 62.89,
+            "pair_total": 4630,
+            "pair_correct": 1299,
+            "pair_accuracy": 28.06,
+            "pair_agree": 1404,
+            "pair_agreement_rate": 30.32
+        }
+    }
+}
