@@ -15,7 +15,8 @@ class InferenceModule():
         prompt_name = config.get("prompt", prompt_name)
         prompt_module = importlib.import_module(f"prompt.{prompt_name}")
         self.prompt_name: str = prompt_name
-        self.system_message: str = prompt_module.system if "system" in dir(prompt_module) else ""
+        self.system_message: str = prompt_module.system if "system" in dir(
+            prompt_module) else ""
         self.user_message_template: str = prompt_module.user
         self.output_pattern: dict = prompt_module.output_pattern
 
@@ -23,7 +24,8 @@ class InferenceModule():
         conversation = []
 
         if self.system_message:
-            conversation.append({"role": "system", "content": self.system_message})
+            conversation.append(
+                {"role": "system", "content": self.system_message})
 
         user_message = self.user_message_template.format(
             input=instruction,
@@ -71,18 +73,20 @@ class VllmModule(InferenceModule):
         self.tokenizer = AutoTokenizer.from_pretrained(tokenizer_name)
         self.model = LLM(**model_args)
 
-        sampling_params_args = dict(temperature=temperature, max_tokens=max_tokens)
+        sampling_params_args = dict(
+            temperature=temperature, max_tokens=max_tokens)
         sampling_params_args.update(vllm_args.get("sampling_params", {}))
         self.sampling_params = SamplingParams(**sampling_params_args)
         print(self.sampling_params)
 
     def generate(self, conversation_list: list) -> list:
-
         prompt_token_ids = [self.tokenizer.apply_chat_template(
             conversation, add_generation_prompt=True) for conversation in conversation_list]
-        outputs = self.model.generate(prompt_token_ids=prompt_token_ids, sampling_params=self.sampling_params)
+        outputs = self.model.generate(
+            prompt_token_ids=prompt_token_ids, sampling_params=self.sampling_params)
 
-        generated_texts = [output.outputs[0].text.strip() for output in outputs]
+        generated_texts = [output.outputs[0].text.strip()
+                           for output in outputs]
         return generated_texts
 
 
@@ -105,7 +109,8 @@ class HfModule(InferenceModule):
         model_name = hf_args.get("model_args", {}).get("model", model_name)
         dtype_name = hf_args.get("model_args", {}).get("dtype", dtype)
 
-        dtype_mapping = {"bfloat16": torch.bfloat16, "float16": torch.float16, "float32": torch.float32}
+        dtype_mapping = {"bfloat16": torch.bfloat16,
+                         "float16": torch.float16, "float32": torch.float32}
         torch_dtype = dtype_mapping[dtype_name]
 
         tokenizer_name = self.config.get("tokenizer", model_name)
@@ -126,7 +131,8 @@ class HfModule(InferenceModule):
             with torch.inference_mode():
                 if torch.cuda.is_available():
                     input_ids = input_ids.cuda()
-                generation = self.model.generate(input_ids=input_ids, **self.generate_kwargs)
+                generation = self.model.generate(
+                    input_ids=input_ids, **self.generate_kwargs)
                 completion = self.tokenizer.decode(
                     generation[0][len(input_ids[0]):], skip_special_tokens=True, clean_up_tokenization_spaces=True)
             generated_texts.append(completion.strip())
