@@ -1,4 +1,4 @@
-prompt: llmbar
+prompt: vicuna
 vllm_args:
   model_args:
     model: /H1/zhouhongli/JudgePO/models/vicuna-7b-v1.5

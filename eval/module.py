@@ -1,6 +1,5 @@
 import importlib
 import re
-
 from tqdm import tqdm
 import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM
@@ -82,9 +81,15 @@ class VllmModule(InferenceModule):
     def generate(self, conversation_list: list) -> list:
         prompt_token_ids = [self.tokenizer.apply_chat_template(
             conversation, add_generation_prompt=True) for conversation in conversation_list]
+
         outputs = self.model.generate(
             prompt_token_ids=prompt_token_ids, sampling_params=self.sampling_params)
 
+        # Print the first conversation prompt and its tokenized form
+        print(
+            f"Sampled conversation:\n{self.tokenizer.decode(prompt_token_ids[0])}", end='')
+        # Print the first generated text and its tokenized form
+        print(f"{outputs[0].outputs[0].text.strip()}")
         generated_texts = [output.outputs[0].text.strip()
                            for output in outputs]
         return generated_texts
