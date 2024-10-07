@@ -11,6 +11,15 @@
     "offsetbias_sft": {
         "file_name": "offsetbias_sft.json"
     },
+    "offsetbias_et": {
+        "file_name": "offsetbias_et.json",
+        "columns": {
+            "prompt": "instruction",
+            "query": "input",
+            "response": "output",
+            "system": "system"
+        }
+    },
     "judgelm_dpo": {
         "file_name": "judgelm_dpo.json",
         "ranking": true,
@@ -36,6 +45,12 @@
         "file_name": "helpsteer_sft.json"
     },
     "helpsteer_et": {
-        "file_name": "helpsteer_et.json"
+        "file_name": "helpsteer_et.json",
+        "columns": {
+            "prompt": "instruction",
+            "query": "input",
+            "response": "output",
+            "system": "system"
+        }
     }
 }

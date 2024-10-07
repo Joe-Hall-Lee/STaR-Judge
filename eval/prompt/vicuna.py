@@ -1,4 +1,4 @@
-system = """A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful, detailed, and polite answers to the user's questions."""
+system = """<s> A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful, detailed, and polite answers to the user's questions."""
 
 user = """{input} ASSISTANT: {output_1}</s>You are a helpful assistant in evaluating the quality of the outputs for a given instruction. Your goal is to select the best output for the given instruction.USER: The output given by the assistant above is called Output (a), and the output below is Output (b).
 # Output (b):

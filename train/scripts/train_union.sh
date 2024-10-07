@@ -1,13 +1,13 @@
 #!/bin/bash
 
-export CUDA_VISIBLE_DEVICES=0,3,6,7
+export CUDA_VISIBLE_DEVICES=1,3,4,7
 WANDB_MODE=offline torchrun --nproc_per_node=4 --master_port=20000 train/main.py \
-    --model_name_or_path /H1/zhouhongli/JudgePO/models/vicuna-7b-v1.5 \
-    --model_type "vicuna" \
+    --model_name_or_path /H1/zhouhongli/JudgePO/models/Llama-2-13B-chat \
+    --model_type "llama2" \
     --data_path train/LLaMA-Factory/data/helpsteer_dpo.json \
     --bf16 True \
-    --output_dir "/H1/zhouhongli/JudgePO/output/vicuna-7b-v1.5-pairwise_et" \
-    --num_train_epochs 3 \
+    --output_dir "/H1/zhouhongli/JudgePO/output/Llama-2-13B-chat-pairwise_0.1" \
+    --num_train_epochs 1 \
     --per_device_train_batch_size 4 \
     --gradient_accumulation_steps 8 \
     --eval_strategy "no" \
@@ -20,7 +20,7 @@ WANDB_MODE=offline torchrun --nproc_per_node=4 --master_port=20000 train/main.py
     --lr_scheduler_type "cosine" \
     --logging_steps 1 \
     --tf32 False \
-    --model_max_length 1024 \
+    --model_max_length 2048 \
     --gradient_checkpointing True \
     --lazy_preprocess True \
     --fsdp "full_shard auto_wrap offload" \

@@ -32,6 +32,8 @@ def train():
         trust_remote_code=model_args.trust_remote_code,
         ignore_mismatched_sizes=True,
     )
+    model.generation_config.temperature = None
+    model.generation_config.top_p = None
 
     tokenizer = transformers.AutoTokenizer.from_pretrained(
         model_args.model_name_or_path,
@@ -42,8 +44,9 @@ def train():
         trust_remote_code=model_args.trust_remote_code,
     )
 
+    model = model.to(torch.bfloat16) if training_args.bf16 else model.to(
+        torch.float16)
 
-    model = model.to(torch.bfloat16) if training_args.bf16 else model.to(torch.float16)
     if tokenizer.pad_token != tokenizer.unk_token:
         tokenizer.pad_token = tokenizer.unk_token
 
@@ -66,7 +69,6 @@ def train():
         data_collator=data_collator,
         **data_module
     )
-
 
     if list(pathlib.Path(training_args.output_dir).glob("checkpoint-*")):
         trainer.train(resume_from_checkpoint=True)

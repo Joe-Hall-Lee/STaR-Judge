@@ -10,6 +10,7 @@ simpo_gamma: 0.3
 pref_loss: simpo  # choices: [sigmoid (dpo), orpo, simpo]
 
 ### dataset
+dataset_dir: train/LLaMA-Factory/data
 dataset: helpsteer_dpo
 template: llama3
 cutoff_len: 1024

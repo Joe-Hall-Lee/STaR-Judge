@@ -1,7 +1,7 @@
-prompt: vicuna
+prompt: llmbar
 vllm_args:
   model_args:
-    model: /H1/zhouhongli/JudgePO/models/vicuna-7b-v1.5
+    model: /H1/zhouhongli/JudgePO/output/vicuna-7b-v1.5-pairwise_et
     dtype: float16
     tensor_parallel_size: 1
     trust_remote_code: true

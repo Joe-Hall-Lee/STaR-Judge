@@ -1,4 +1,3 @@
-import re
 local_rank = None
 
 

@@ -1,11 +1,16 @@
 import json
 import torch
+import random
+import pprint
+import copy
 from dataclasses import dataclass
 from typing import Dict, Union, List
 from torch.utils.data import Dataset
 import transformers
 from utils import format_instruction_sft, format_instruction_et, rank0_print
+from transformers.trainer_pt_utils import LabelSmoother
 
+IGNORE_TOKEN_ID = LabelSmoother.ignore_index
 
 def preprocess(
     sources,
@@ -33,11 +38,11 @@ def preprocess(
         better_et_prompts.append(better_et_prompt)
         better_et_labels.append("Output (a)")
 
-        source["chosen"], source["rejected"] = source["rejected"], source["chosen"]
-
         worse_sft_prompt = better_sft_prompt
         worse_sft_prompts.append(worse_sft_prompt)
         worse_sft_labels.append(source["rejected"])
+
+        source["chosen"], source["rejected"] = source["rejected"], source["chosen"]
 
         worse_et_prompt = format_instruction_et(instruction_et, source)
         worse_et_prompts.append(worse_et_prompt)
@@ -77,7 +82,7 @@ class PairwiseLazySupervisedDataset(LazySupervisedDataset):
                 max_length=self.tokenizer.model_max_length,
                 truncation=True,
             )
-            labels = tokenized.input_ids.clone()
+            labels = copy.deepcopy(tokenized.input_ids)
             source_tokenized = self.tokenizer(
                 [prompt],
                 return_tensors="pt",
@@ -87,7 +92,7 @@ class PairwiseLazySupervisedDataset(LazySupervisedDataset):
             )
             source_len = source_tokenized.input_ids[0].ne(
                 self.tokenizer.pad_token_id).sum().item()
-            labels[0][:source_len] = -100  # IGNORE_TOKEN_ID
+            labels[0][:source_len] = IGNORE_TOKEN_ID
 
             return dict(
                 input_ids=tokenized.input_ids[0],
@@ -99,6 +104,8 @@ class PairwiseLazySupervisedDataset(LazySupervisedDataset):
         worse_sft = _tokenize(worse_sft_prompts[0], worse_sft_labels[0])
         better_et = _tokenize(better_et_prompts[0], better_et_labels[0])
         worse_et = _tokenize(worse_et_prompts[0], worse_et_labels[0])
+
+        # rank0_print(better_et["labels"])
 
         return {
             "better_sft_input_ids": better_sft["input_ids"],
@@ -130,14 +137,37 @@ def make_supervised_data_module(
 
     with open(data_args.data_path, "r", encoding="utf-8") as fin:
         train_data = json.load(fin)
-    train_dataset = dataset_cls(train_data,
-                                tokenizer=tokenizer,
-                                instruction_et=instruction_et,
-                                instruction_sft=instruction_sft,
-                                data_path=data_args.data_path,
-                                )
+    train_dataset = dataset_cls(
+        train_data,
+        tokenizer=tokenizer,
+        instruction_et=instruction_et,
+        instruction_sft=instruction_sft,
+        data_path=data_args.data_path,
+    )
 
     rank0_print("Loading data finished")
+
+    random_idx = random.randint(0, len(train_dataset) - 1)
+    sample = train_dataset[random_idx]
+    rank0_print(f"Sample at index {random_idx}:")
+
+    # Decode input_ids and labels back to text
+    def decode(ids):
+        # Replace -100 (ignore index) with pad token id before decoding labels
+        ids = [id if id != -100 else tokenizer.pad_token_id for id in ids.tolist()]
+        return tokenizer.decode(ids, skip_special_tokens=False)
+
+    decoded_sample = {}
+    for key, value in sample.items():
+        if 'input_ids' in key or 'labels' in key:
+            decoded_text = decode(value)
+            decoded_sample[key] = decoded_text
+        else:
+            # For attention masks and other tensors
+            decoded_sample[key] = value
+
+    # Pretty print the decoded sample
+    rank0_print(pprint.pformat(decoded_sample))
 
     return dict(train_dataset=train_dataset)
 

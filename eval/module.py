@@ -87,7 +87,7 @@ class VllmModule(InferenceModule):
 
         # Print the first conversation prompt and its tokenized form
         print(
-            f"Sampled conversation:\n{self.tokenizer.decode(prompt_token_ids[0])}", end='')
+            f"Sampled conversation:\n{self.tokenizer.decode(prompt_token_ids[0], skip_special_tokens=False)}", end='')
         # Print the first generated text and its tokenized form
         print(f"{outputs[0].outputs[0].text.strip()}")
         generated_texts = [output.outputs[0].text.strip()
