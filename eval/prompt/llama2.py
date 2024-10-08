@@ -1,6 +1,6 @@
 system = """A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful, detailed, and polite answers to the user's questions."""
 
-user = """{input} </INST>{output_1} </s> <s><INST> The output given by the assistant above is called Output (a), and the output below is Output (b).
+user = """{input} [/INST] {output_1}</s><s>[INST] The output given by the assistant above is called Output (a), and the output below is Output (b).
 # Output (b):
 {output_2}
 
@@ -15,7 +15,7 @@ Do NOT provide any explanation for your choice.
 Do NOT say both / neither are good.
 You should answer using ONLY "Output (a)" or "Output (b)". Do NOT output any other words.
 
-# Which is better, Output (a) or Output (b)? Your response should be either "Output (a)" or "Output (b)":"""
+# Which is better, Output (a) or Output (b)? Your response should be either "Output (a)" or "Output (b)": [/INST]"""
 
 output_pattern = {
     1: r"(?:^|\n) ?Output \(a\)",

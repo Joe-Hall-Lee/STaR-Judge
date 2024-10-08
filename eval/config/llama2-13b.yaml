@@ -1,8 +1,7 @@
 prompt: llmbar
 vllm_args:
   model_args:
-    model: /H1/zhouhongli/JudgePO/models/Llama-2-13B-chat
-    dtype: float16
+    model: /H1/zhouhongli/JudgePO/LLaMA-Factory/output/Llama-2-13B-chat-offsetbias_et
     tensor_parallel_size: 1
     trust_remote_code: true
   sampling_params:
