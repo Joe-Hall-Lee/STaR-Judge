@@ -1,9 +1,6 @@
-system = """"""
+system = """A chat between a curious user and an artificial intelligence assistant. The assistant gives helpful, detailed, and polite answers to the user's questions."""
 
-user = """{input} </INST>{output_1}</s><s><INST> <<SYS>>
-You are a helpful assistant in evaluating the quality of the outputs for a given instruction. Your goal is to select the best output for the given instruction.
-<</SYS>>
-The output given by the assistant above is called Output (a), and the output below is Output (b).
+user = """{input} </INST>{output_1} </s> <s><INST> The output given by the assistant above is called Output (a), and the output below is Output (b).
 # Output (b):
 {output_2}
 
