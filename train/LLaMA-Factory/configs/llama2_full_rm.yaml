@@ -1,5 +1,5 @@
 ### model
-model_name_or_path: /H1/zhouhongli/PORM/models/Llama-2-13B-chat
+model_name_or_path: /H1/zhouhongli/PORM/output/Llama-2-13B-chat-helpsteer_simpo_2.0_1.6_lr_1e-5_epoch_3
 ### method
 stage: rm
 do_train: true
@@ -15,7 +15,7 @@ overwrite_cache: true
 preprocessing_num_workers: 16
 
 ### output
-output_dir: /H1/zhouhongli/PORM/output/Llama-2-13B-chat-helpsteer_rm
+output_dir: /H1/zhouhongli/PORM/output/Llama-2-13B-chat-helpsteer_simpo_2.0_1.6_lr_1e-5_epoch_3_rm
 logging_steps: 1
 save_steps: 1000
 overwrite_output_dir: true
