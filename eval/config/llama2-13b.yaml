@@ -1,7 +1,7 @@
 prompt: llmbar
 vllm_args:
   model_args:
-    model: /H1/zhouhongli/JudgePO/LLaMA-Factory/output/Llama-2-13B-chat-helpsteer_simpo_2.0_1.6_lr_1e-5_epoch_3_et
+    model: /H1/zhouhongli/PORM/output/Llama-2-13B-chat-helpsteer_simpo_2.0_1.6_lr_1e-5_epoch_3
     tensor_parallel_size: 1
     trust_remote_code: true
   sampling_params:
