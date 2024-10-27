@@ -3,3 +3,4 @@ train/LLaMA-Factory/data/helpsteer_sft.json filter=lfs diff=lfs merge=lfs -text
 train/LLaMA-Factory/data/judgelm_sft.json filter=lfs diff=lfs merge=lfs -text
 train/LLaMA-Factory/data/judgelm_dpo.json filter=lfs diff=lfs merge=lfs -text
 train/LLaMA-Factory/data/helpsteer_et.json filter=lfs diff=lfs merge=lfs -text
+train/data/helpsteer.json filter=lfs diff=lfs merge=lfs -text

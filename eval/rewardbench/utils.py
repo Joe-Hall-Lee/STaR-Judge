@@ -28,7 +28,7 @@ from transformers import PreTrainedTokenizer
 from .models import REWARD_MODEL_CONFIG
 
 # HuggingFace Hub locations
-CORE_EVAL_SET = "/H1/zhouhongli/JudgePO/eval/data/rewardbench/filtered.json"
+CORE_EVAL_SET = "eval/data/rewardbench/filtered.json"
 EXTRA_PREF_SETS = "allenai/pref-test-sets"
 BON_CANDIDATES = "ai2-adapt-dev/HERM_BoN_candidates"  # private until officially supported
 EVAL_REPO = "allenai/reward-bench-results"  # data repo to upload results

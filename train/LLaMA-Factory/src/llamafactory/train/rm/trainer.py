@@ -89,6 +89,7 @@ class PairwiseTrainer(Trainer):
         """
         _, _, values = model(**inputs, output_hidden_states=True,
                              return_dict=True, use_cache=False)
+
         batch_size = inputs["input_ids"].size(0) // 2
         chosen_masks, rejected_masks = torch.split(
             inputs["attention_mask"], batch_size, dim=0)
@@ -96,6 +97,7 @@ class PairwiseTrainer(Trainer):
             values, batch_size, dim=0)
         chosen_scores = chosen_rewards.gather(
             dim=-1, index=(chosen_masks.sum(dim=-1, keepdim=True) - 1))
+
         rejected_scores = rejected_rewards.gather(
             dim=-1, index=(rejected_masks.sum(dim=-1, keepdim=True) - 1))
         chosen_scores, rejected_scores = chosen_scores.squeeze(), rejected_scores.squeeze()

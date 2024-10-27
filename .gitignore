@@ -1,6 +1,7 @@
 *.log
 __pycache__
-**/__pycache__
+**/__pycache__/
 wandb
 results
 result
+save_reward_models
