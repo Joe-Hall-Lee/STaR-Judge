@@ -1,7 +1,5 @@
 from dataclasses import dataclass
 from typing import Any, Dict, List, Optional, Union
-from accelerate import Accelerator
-import numpy as np
 import torch
 import torch.nn as nn
 from base_trainer import RewardTrainer

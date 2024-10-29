@@ -39,7 +39,6 @@ class RewardBenchPipeline:
             truncation=truncation,
             max_length=max_length,
             padding=padding,
-            # return_special_tokens_mask=True,
             return_tensors="pt",
         ).to("cuda")
 

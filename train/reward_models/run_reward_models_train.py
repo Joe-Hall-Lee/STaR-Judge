@@ -95,7 +95,7 @@ training_args = TrainingArguments(
     gradient_checkpointing=script_args.gradient_checkpointing,
     bf16=script_args.bf16,
     logging_strategy="steps",
-    logging_steps=10,
+    logging_steps=1,
     warmup_ratio=0.03,
     optim=script_args.optim,
     lr_scheduler_type=script_args.lr_scheduler_type,
@@ -154,10 +154,10 @@ model.resize_token_embeddings(len(tokenizer))
 model.config.pad_token_id = tokenizer.pad_token_id
 print_trainable_parameters(model)
 
-# Wrap the model with FSDP
-model = FSDP(model,
-             auto_wrap_policy=size_based_auto_wrap_policy,
-             device_id=device)
+# # Wrap the model with FSDP
+# model = FSDP(model,
+#              auto_wrap_policy=size_based_auto_wrap_policy,
+#              device_id=device)
 
 # Define the trainer parameters
 trainer_params = {
@@ -186,3 +186,16 @@ print_trainable_parameters(trainer.model)
 
 print('training start')
 trainer.train()
+
+# # Save model
+# model.config.use_cache = True
+# trainer.save_state()
+
+# from torch.distributed.fsdp import FullyShardedDataParallel as FSDP
+# from torch.distributed.fsdp import StateDictType, FullStateDictConfig
+
+# save_policy = FullStateDictConfig(offload_to_cpu=True, rank0_only=True)
+# with FSDP.state_dict_type(
+#     trainer.model, StateDictType.FULL_STATE_DICT, save_policy
+# ):
+#     trainer.save_model()

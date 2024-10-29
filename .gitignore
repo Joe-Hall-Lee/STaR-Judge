@@ -5,3 +5,4 @@ wandb
 results
 result
 save_reward_models
+.*
