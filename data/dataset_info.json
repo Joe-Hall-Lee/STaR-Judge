@@ -1,0 +1,56 @@
+{
+    "offsetbias_dpo": {
+        "file_name": "offsetbias_dpo.json",
+        "ranking": true,
+        "columns": {
+            "prompt": "instruction",
+            "chosen": "chosen",
+            "rejected": "rejected"
+        }
+    },
+    "offsetbias_sft": {
+        "file_name": "offsetbias_sft.json"
+    },
+    "offsetbias_et": {
+        "file_name": "offsetbias_et.json",
+        "columns": {
+            "prompt": "instruction",
+            "query": "input",
+            "response": "output",
+            "system": "system"
+        }
+    },
+    "judgelm_dpo": {
+        "file_name": "judgelm_dpo.json",
+        "ranking": true,
+        "columns": {
+            "prompt": "instruction",
+            "chosen": "chosen",
+            "rejected": "rejected"
+        }
+    },
+    "judgelm_sft": {
+        "file_name": "judgelm_sft.json"
+    },
+    "helpsteer2_dpo": {
+        "file_name": "helpsteer2_dpo.json",
+        "ranking": true,
+        "columns": {
+            "prompt": "instruction",
+            "chosen": "chosen",
+            "rejected": "rejected"
+        }
+    },
+    "helpsteer2_sft": {
+        "file_name": "helpsteer2_sft.json"
+    },
+    "helpsteer_et": {
+        "file_name": "helpsteer_et.json",
+        "columns": {
+            "prompt": "instruction",
+            "query": "input",
+            "response": "output",
+            "system": "system"
+        }
+    }
+}
