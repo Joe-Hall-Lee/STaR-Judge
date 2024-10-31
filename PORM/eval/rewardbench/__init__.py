@@ -14,7 +14,6 @@
 
 __version__ = "0.1.3"
 from .chattemplates import *  # noqa
-from .dpo import DPOInference
 from .models import REWARD_MODEL_CONFIG
 from .utils import (
     check_tokenizer_chat_template,
@@ -29,7 +28,6 @@ from .utils import (
 
 __all__ = [
     check_tokenizer_chat_template,
-    DPOInference,
     load_bon_dataset,
     load_eval_dataset,
     load_and_process_dataset,

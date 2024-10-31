@@ -1,10 +1,10 @@
 from dataclasses import dataclass, field
 from typing import List, Optional
-from accelerate import Accelerator
+from accelerate import Accelerator, FullyShardedDataParallelPlugin
+from accelerate.utils import DeepSpeedPlugin
 import os
 import torch
-import torch.nn as nn
-from peft import LoraConfig, TaskType
+from torch.utils.data import DataLoader
 from transformers import (
     AutoModelForSequenceClassification,
     AutoTokenizer,
@@ -18,7 +18,7 @@ from utils import print_trainable_parameters
 
 @dataclass
 class ScriptArguments:
-    # training args
+    # Training args
     per_device_train_batch_size: Optional[int] = field(default=1)
     gradient_accumulation_steps: Optional[int] = field(default=16)
     learning_rate: Optional[float] = field(default=1e-5)
@@ -32,29 +32,22 @@ class ScriptArguments:
     gradient_checkpointing: Optional[bool] = field(default=True)
     bf16: Optional[bool] = field(default=True)
     attn_implementation: Optional[str] = field(default="")
-    # data
+    # Data
     dataset: Optional[str] = field(default='llm-blender/Unified-Feedback')
     dataset_mode: Optional[str] = field(default='', metadata={
                                         "help": "use from '', '40k', and '400k' for the paper's experiments"},)
-    # lora
-    use_lora: Optional[bool] = field(default=True)
-    lora_target_modules: Optional[List[str]] = field(
-        default_factory=lambda: ["q_proj", "k_proj", "v_proj", "o_proj"])
-    lora_r: Optional[int] = field(default=32)
-    lora_alpha: Optional[int] = field(default=64)
-    lora_dropout: Optional[float] = field(default=0.05)
-    # eval
+
+    # Evaluation
     per_device_eval_batch_size: Optional[int] = field(default=1)
     eval_strategy: Optional[str] = field(default="steps")
     eval_steps: Optional[int] = field(default=100)
-    # model and loss
+    # Model and loss
     base_model: Optional[str] = field(default="google/gemma-2b-it")
     loss_type: Optional[str] = field(default='bt', metadata={
                                      'help': "use 'bt', 'margin', 'labelsmooth', and 'pos_reg'."})
     weight_ratio: Optional[float] = field(
         default=0.1, metadata={'help': 'the ratio for label smooth or posreg'})
-    freeze_pretrained: Optional[bool] = field(default=False)
-    # log
+    # Logging
     report_to: Optional[str] = field(default='none', metadata={
                                      'help': "use 'none', 'wandb'. "})
     log_dir: Optional[str] = field(default='./reward_models_train')
@@ -62,20 +55,15 @@ class ScriptArguments:
     save_strategy: Optional[str] = field(default="no")
     save_steps: Optional[int] = field(default=1000)
     debug: Optional[bool] = field(default=False, metadata={
-                                  'help': 'if debug=True, only train with 10 samples'})
+                                  'help': 'if debug=True, only train with 4 samples'})
 
 
+# Parse the script arguments
 parser = HfArgumentParser(ScriptArguments)
-
-
 script_args = parser.parse_args_into_dataclasses()[0]
 model_name_split = script_args.base_model.split("/")[-1]
-if script_args.use_lora:
-    output_name = f"{script_args.log_dir}/{model_name_split}_{script_args.wandb_name}_len{script_args.max_length}_lora{script_args.lora_r}_{script_args.learning_rate}_data{script_args.dataset.split('/')[-1]}"
-else:
-    output_name = f"{script_args.log_dir}/{model_name_split}_{script_args.wandb_name}_len{script_args.max_length}_fulltrain_{script_args.learning_rate}_data{script_args.dataset.split('/')[-1]}"
+output_name = f"{script_args.log_dir}/{model_name_split}_{script_args.wandb_name}_len{script_args.max_length}_fulltrain_{script_args.learning_rate}_data{script_args.dataset.split('/')[-1]}"
 
-device = Accelerator().local_process_index
 
 training_args = TrainingArguments(
     output_dir=os.path.join(output_name, 'logs'),
@@ -99,11 +87,10 @@ training_args = TrainingArguments(
     max_grad_norm=5.0,
     report_to=script_args.report_to,
     remove_unused_columns=False,
-    gradient_checkpointing_kwargs={"use_reentrant": False},
-    ddp_find_unused_parameters=False,
+    ddp_find_unused_parameters=False
 )
 
-# Load the tokenizer.
+# Load the tokenizer
 tokenizer = AutoTokenizer.from_pretrained(
     script_args.base_model, use_fast=False)
 tokenizer.max_length = script_args.max_length
@@ -115,10 +102,9 @@ else:
 
 # Load datasets
 train_dataset, eval_dataset = load_train_eval_dataset(
-    script_args.dataset, tokenizer, mode=script_args.dataset_mode, size=10 if script_args.debug else None)
+    script_args.dataset, tokenizer, mode=script_args.dataset_mode, size=4 if script_args.debug else None)
 print('Training dataset size: {}, validation dataset size: {}'.format(
     len(train_dataset), len(eval_dataset)))
-
 
 if len(script_args.attn_implementation):
     model_params = {
@@ -128,29 +114,22 @@ else:
     model_params = {}
 
 model = AutoModelForSequenceClassification.from_pretrained(
-    script_args.base_model, num_labels=1, device_map=device,
+    script_args.base_model, num_labels=1,
     torch_dtype=torch.bfloat16,
     **model_params
 )
 model = model.to(torch.bfloat16) if training_args.bf16 else model.to(
     torch.float16)
+model.resize_token_embeddings(len(tokenizer))
 
-if script_args.freeze_pretrained:
-    # for frozen baseline
-    mlp_layer = nn.Sequential(
-        nn.Linear(model.config.hidden_size, 1024, dtype=torch.bfloat16),
-        nn.ReLU(),
-        nn.Linear(1024, 1, dtype=torch.bfloat16)
-    )
-    mlp_layer.to(device)
-    # Replace the classifier with the MLP
-    freeze_trainable_parameters(model)
-    model.score = mlp_layer  # the score is trainable
 
 model.resize_token_embeddings(len(tokenizer))
 model.config.pad_token_id = tokenizer.pad_token_id
 print_trainable_parameters(model)
 
+# Data collator
+data_collator = RewardDataCollatorWithPadding(
+    tokenizer=tokenizer, max_length=script_args.max_length)
 
 # Define the trainer parameters
 trainer_params = {
@@ -159,24 +138,28 @@ trainer_params = {
     "tokenizer": tokenizer,
     "train_dataset": train_dataset,
     "eval_dataset": eval_dataset,
-    "data_collator": RewardDataCollatorWithPadding(tokenizer=tokenizer, max_length=script_args.max_length),
+    "data_collator": data_collator,
     'loss_type': script_args.loss_type,
     'weight_ratio': script_args.weight_ratio,
 }
 
-if script_args.use_lora:
-    peft_config = LoraConfig(
-        task_type=TaskType.SEQ_CLS,
-        target_modules=script_args.lora_target_modules,
-        r=script_args.lora_r,
-        lora_alpha=script_args.lora_alpha,
-        lora_dropout=script_args.lora_dropout,
-    )
-    trainer_params["peft_config"] = peft_config
-
 trainer = SimpleRewardTrainer(**trainer_params)
+
 print_trainable_parameters(trainer.model)
 
 print('training start')
 trainer.train()
-trainer.save_model()
+# Save model
+model.config.use_cache = True
+trainer.save_state()
+if trainer.is_deepspeed_enabled:
+    trainer.save_model()
+else:
+    from torch.distributed.fsdp import FullyShardedDataParallel as FSDP
+    from torch.distributed.fsdp import StateDictType, FullStateDictConfig
+
+    save_policy = FullStateDictConfig(offload_to_cpu=True, rank0_only=True)
+    with FSDP.state_dict_type(
+        trainer.model, StateDictType.FULL_STATE_DICT, save_policy
+    ):
+        trainer.save_model()

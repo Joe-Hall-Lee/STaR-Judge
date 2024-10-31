@@ -335,131 +335,73 @@ def rewardbench(args: Args):
 
     logger.info("*** Load reward model ***")
 
-    ############################
-    # Load DPO model pipeline
-    ############################
-    if is_dpo:
-        # if not preference data, raise NotImplementedError (only implemented for pairwise)
-        if not is_preference_ranking:
-            raise NotImplementedError(
-                "DPO only implemented for pairwise preference data.")
-        tokenizer.pad_token = tokenizer.eos_token
-        # if no BOS token, set as pad token, e.g. QWEN models
-        if tokenizer.bos_token is None:
-            tokenizer.bos_token_id = tokenizer.eos_token_id
-            tokenizer.pad_token_id = tokenizer.eos_token_id
-
-        model_kwargs = {
-            "load_in_8bit": True,
-            "device_map": "auto" if torch.cuda.is_available() else "cpu",
-            "torch_dtype": torch.float16 if torch.cuda.is_available() else None,
-        }
-        model = model_builder(
-            args.model,
-            trust_remote_code=args.trust_remote_code,
-            ignore_mismatched_sizes=True,
-            **model_kwargs,
-        )
-        ref_model = model_builder(
-            args.ref_model,
-            trust_remote_code=args.trust_remote_code,
-            **model_kwargs,
-        )
-
-        # use internal inference functions in DPO trainer
-        dpo = DPOInference(
-            model,
-            ref_model,
-            tokenizer=tokenizer,
-            accelerator=accelerator,
-            # norm is norm, avg is average, sum is sum
-        )
-
-        # tokenize dataset
-        column_names = list(dataset.features)
-
-        tokenized_dataset = dataset.map(
-            dpo.tokenize_row, remove_columns=column_names)
-        dataloader = torch.utils.data.DataLoader(
-            tokenized_dataset,
-            batch_size=args.batch_size,
-            collate_fn=DPODataCollatorWithPadding(
-                pad_token_id=tokenizer.pad_token_id,
-                label_pad_token_id=dpo.label_pad_token_id,
-                is_encoder_decoder=dpo.is_encoder_decoder,
-            ),
-            # collate_fn = lambda x: x, # fix weird batching error
-            shuffle=False,
-            drop_last=False,
-        )
 
     ############################
     # Load classifier model pipeline
     ############################
-    else:
-        # padding experiments for determinism
-        tokenizer.padding_side = "left"
-        truncation = False
-        if args.force_truncation:
-            truncation = True
-            tokenizer.truncation_side = "left"
+    # padding experiments for determinism
+    tokenizer.padding_side = "left"
+    truncation = False
+    if args.force_truncation:
+        truncation = True
+        tokenizer.truncation_side = "left"
 
-        reward_pipeline_kwargs = {
-            "batch_size": args.batch_size,  # eval_args.inference_batch_size,
-            "truncation": truncation,
-            "padding": True,
-            "max_length": args.max_length,
-            "function_to_apply": "none",  # Compute raw logits
-            "return_token_type_ids": False,
+    reward_pipeline_kwargs = {
+        "batch_size": args.batch_size,  # eval_args.inference_batch_size,
+        "truncation": truncation,
+        "padding": True,
+        "max_length": args.max_length,
+        "function_to_apply": "none",  # Compute raw logits
+        "return_token_type_ids": False,
+    }
+    if quantized:
+        model_kwargs = {
+            "load_in_8bit": True,
+            "device_map": {"": current_device},
+            "torch_dtype": torch_dtype if torch.cuda.is_available() else None,
         }
-        if quantized:
-            model_kwargs = {
-                "load_in_8bit": True,
-                "device_map": {"": current_device},
-                "torch_dtype": torch_dtype if torch.cuda.is_available() else None,
-            }
-        else:
-            # note, device map auto does not work for bitsandbytes quantized models
-            model_kwargs = {
-                "device_map": "auto",
-                "torch_dtype": torch_dtype,
-            }
+    else:
+        # note, device map auto does not work for bitsandbytes quantized models
+        model_kwargs = {
+            "device_map": "auto",
+            "torch_dtype": torch_dtype,
+        }
 
-        # if attn_implementation is not specified, this falls back to Hugging Face's default
-        # strategy (which chooses between sdpa and eager depending on pytorch version)
-        if args.attn_implementation:
-            model_kwargs["attn_implementation"] = args.attn_implementation
+    # if attn_implementation is not specified, this falls back to Hugging Face's default
+    # strategy (which chooses between sdpa and eager depending on pytorch version)
+    if args.attn_implementation:
+        model_kwargs["attn_implementation"] = args.attn_implementation
 
-        model = model_builder(
-            args.model, num_labels=1, **model_kwargs, revision=args.revision, trust_remote_code=args.trust_remote_code
-        )
-        reward_pipe = pipeline_builder(
-            "text-classification",  # often not used
-            model=model,
-            tokenizer=tokenizer,
-        )
+    model = model_builder(
+        args.model, num_labels=1, **model_kwargs, revision=args.revision, trust_remote_code=args.trust_remote_code
+    )
+    reward_pipe = pipeline_builder(
+        "text-classification",  # often not used
+        model=model,
+        tokenizer=tokenizer,
+    )
 
-        # set pad token to eos token if not set
-        if reward_pipe.tokenizer.pad_token_id is None:
-            reward_pipe.model.config.pad_token_id = reward_pipe.tokenizer.eos_token_id
-            reward_pipe.tokenizer.pad_token_id = reward_pipe.tokenizer.eos_token_id
-        # For models whose config did not contains `pad_token_id`
-        if reward_pipe.model.config.pad_token_id is None:
-            reward_pipe.model.config.pad_token_id = reward_pipe.tokenizer.pad_token_id
+    # set pad token to eos token if not set
+    if reward_pipe.tokenizer.pad_token_id is None:
+        reward_pipe.model.config.pad_token_id = reward_pipe.tokenizer.eos_token_id
+        reward_pipe.tokenizer.pad_token_id = reward_pipe.tokenizer.eos_token_id
+    # For models whose config did not contains `pad_token_id`
+    if reward_pipe.model.config.pad_token_id is None:
+        reward_pipe.model.config.pad_token_id = reward_pipe.tokenizer.pad_token_id
 
-        # if using fastchat template (no template in tokenizer), make the RM tokenizer output an EOS token
-        if not check_tokenizer_chat_template(tokenizer):
-            reward_pipe.tokenizer.add_eos_token = True
+    # if using fastchat template (no template in tokenizer), make the RM tokenizer output an EOS token
+    if not check_tokenizer_chat_template(tokenizer):
+        reward_pipe.tokenizer.add_eos_token = True
 
-        dataloader = torch.utils.data.DataLoader(
-            dataset,
-            batch_size=args.batch_size,
-            shuffle=False,
-            drop_last=False,
-        )
+    dataloader = torch.utils.data.DataLoader(
+        dataset,
+        batch_size=args.batch_size,
+        shuffle=False,
+        drop_last=False,
+    )
 
-        model = accelerator.prepare(reward_pipe.model)
-        reward_pipe.model = model
+    model = accelerator.prepare(reward_pipe.model)
+    reward_pipe.model = model
 
     ############################
     # Run inference
@@ -474,13 +416,10 @@ def rewardbench(args: Args):
         logger.info(f"RM inference step {step}/{len(dataloader)}")
 
         if is_preference_ranking:
-            if is_dpo:
-                rewards_chosen, rewards_rejected = dpo.inference_step(batch)
-            else:
-                rewards_chosen = reward_pipe(
-                    batch["text_chosen"], **reward_pipeline_kwargs)
-                rewards_rejected = reward_pipe(
-                    batch["text_rejected"], **reward_pipeline_kwargs)
+            rewards_chosen = reward_pipe(
+                batch["text_chosen"], **reward_pipeline_kwargs)
+            rewards_rejected = reward_pipe(
+                batch["text_rejected"], **reward_pipeline_kwargs)
 
             # for each item in batch, record 1 if chosen > rejected
             # extra score from dict within batched results (e.g. logits)

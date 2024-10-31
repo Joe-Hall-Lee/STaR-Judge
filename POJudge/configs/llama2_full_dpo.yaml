@@ -1,5 +1,5 @@
 ### model
-model_name_or_path: /H1/zhouhongli/PORM/models/Llama-2-13B-chat
+model_name_or_path: ../models/Llama-2-7b-chat
 ### method
 stage: dpo
 do_train: true
@@ -9,15 +9,15 @@ pref_beta: 0.1
 pref_loss: sigmoid  # choices: [sigmoid (dpo), orpo, simpo]
 
 ### dataset
-dataset_dir: ../../../../data
-dataset: helpsteer_dpo
+dataset_dir: ../data
+dataset: helpsteer2_dpo
 template: llama2
 cutoff_len: 1024
 max_samples: 1000000
 overwrite_cache: true
 
 ### output
-output_dir: /H1/zhouhongli/PORM/output/Llama-2-13B-chat-helpsteer_dpo_0.1_lr_1e-6_epoch_3
+output_dir: ../output/Llama-2-7b-chat-helpsteer2_dpo_0.1_lr_1e-6_epoch_3
 logging_steps: 1
 save_steps: 1000
 plot_loss: false

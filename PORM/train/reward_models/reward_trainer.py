@@ -6,6 +6,10 @@ from base_trainer import RewardTrainer
 from transformers.utils import PaddingStrategy
 from transformers import AutoTokenizer
 
+import torch
+import torch.nn as nn
+from torch.utils.data import DataLoader
+
 
 
 @dataclass
@@ -56,9 +60,11 @@ class SimpleRewardTrainer(RewardTrainer):
         self.weight_ratio = kwargs.pop('weight_ratio', 0.1)
         super(SimpleRewardTrainer, self).__init__(**kwargs)
 
-
     def compute_loss(self, model, inputs, return_outputs=False):
-        rewards = model(input_ids=inputs["input_ids"], attention_mask=inputs["attention_mask"])[0]
+        # with unwrap_model_for_generation(model, self.accelerator) as unwrapped_model:
+        #     rewards = unwrapped_model(
+        #         input_ids=inputs["input_ids"], attention_mask=inputs["attention_mask"])[0]
+        rewards = model(input_ids=inputs["input_ids"], attention_mask=inputs["attention_mask"])["logits"]
         bsz = rewards.size(0)
         jidx = torch.arange(0, bsz, 2)
         kidx = jidx + 1
@@ -66,13 +72,17 @@ class SimpleRewardTrainer(RewardTrainer):
         rewards_k = rewards[kidx]
 
         if self.loss_type == 'bt':
-            loss = - nn.functional.logsigmoid(rewards_j - rewards_k).mean() 
+            loss = - nn.functional.logsigmoid(rewards_j - rewards_k).mean()
         elif self.loss_type == 'pos_reg':
-            loss = - nn.functional.logsigmoid(rewards_j - rewards_k).mean() - self.weight_ratio * nn.functional.logsigmoid(rewards_j.mean())
+            loss = - nn.functional.logsigmoid(rewards_j - rewards_k).mean(
+            ) - self.weight_ratio * nn.functional.logsigmoid(rewards_j.mean())
         elif self.loss_type == 'margin':
-            loss = -nn.functional.logsigmoid(rewards_j - rewards_k - torch.tensor(inputs["margin"], device=inputs["margin"][0].device).view(-1,1)).mean()
+            loss = -nn.functional.logsigmoid(rewards_j - rewards_k - torch.tensor(
+                inputs["margin"], device=inputs["margin"][0].device).view(-1, 1)).mean()
         elif self.loss_type == 'labelsmooth':
-            loss = - (1-self.weight_ratio) * nn.functional.logsigmoid(rewards_j - rewards_k).mean() - self.weight_ratio * nn.functional.logsigmoid(rewards_k - rewards_j).mean() 
+            loss = - (1-self.weight_ratio) * nn.functional.logsigmoid(rewards_j - rewards_k).mean() - \
+                self.weight_ratio * \
+                nn.functional.logsigmoid(rewards_k - rewards_j).mean()
         else:
             raise NotImplementedError
 
