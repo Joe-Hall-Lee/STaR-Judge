@@ -6,7 +6,7 @@ export CUDA_VISIBLE_DEVICES=4,5,6,7
 
 
 dataset_name='../data/helpsteer2_dpo.json'
-base_model='../models/Llama-3.1-8B-Instruct'
+base_model='../models/Llama-2-13B-chat'
 log_dir='save_reward_models'
 main_process_port=12541
 

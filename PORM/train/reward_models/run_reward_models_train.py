@@ -1,10 +1,7 @@
 from dataclasses import dataclass, field
-from typing import List, Optional
-from accelerate import Accelerator, FullyShardedDataParallelPlugin
-from accelerate.utils import DeepSpeedPlugin
+from typing import Optional
 import os
 import torch
-from torch.utils.data import DataLoader
 from transformers import (
     AutoModelForSequenceClassification,
     AutoTokenizer,
@@ -24,8 +21,7 @@ class ScriptArguments:
     learning_rate: Optional[float] = field(default=1e-5)
     num_train_epochs: Optional[int] = field(default=2, metadata={
                                             "help": "The number of training epochs for the reward model."})
-    optim: Optional[str] = field(default="adamw_hf",  metadata={
-                                 "help": "The optimizer to use."})
+    optim: Optional[str] = field(default="adamw_hf",  metadata={"help": "The optimizer to use."})
     lr_scheduler_type: Optional[str] = field(
         default="cosine", metadata={"help": "The lr scheduler"},)
     max_length: Optional[int] = field(default=1024)
@@ -52,8 +48,8 @@ class ScriptArguments:
                                      'help': "use 'none', 'wandb'. "})
     log_dir: Optional[str] = field(default='./reward_models_train')
     wandb_name: Optional[str] = field(default="test",)
-    save_strategy: Optional[str] = field(default="no")
-    save_steps: Optional[int] = field(default=1000)
+    save_strategy: Optional[str] = field(default="steps")
+    save_steps: Optional[int] = field(default=10000)
     debug: Optional[bool] = field(default=False, metadata={
                                   'help': 'if debug=True, only train with 4 samples'})
 
@@ -94,11 +90,8 @@ training_args = TrainingArguments(
 tokenizer = AutoTokenizer.from_pretrained(
     script_args.base_model, use_fast=False)
 tokenizer.max_length = script_args.max_length
-if 'llama' in script_args.base_model.lower():
-    tokenizer.add_special_tokens({'pad_token': '[PAD]'})
-else:
-    if tokenizer.pad_token is None:
-        tokenizer.pad_token = tokenizer.eos_token
+if tokenizer.pad_token is None:
+    tokenizer.pad_token = tokenizer.eos_token
 
 # Load datasets
 train_dataset, eval_dataset = load_train_eval_dataset(
@@ -122,8 +115,6 @@ model = model.to(torch.bfloat16) if training_args.bf16 else model.to(
     torch.float16)
 model.resize_token_embeddings(len(tokenizer))
 
-
-model.resize_token_embeddings(len(tokenizer))
 model.config.pad_token_id = tokenizer.pad_token_id
 print_trainable_parameters(model)
 
@@ -149,17 +140,3 @@ print_trainable_parameters(trainer.model)
 
 print('training start')
 trainer.train()
-# Save model
-model.config.use_cache = True
-trainer.save_state()
-if trainer.is_deepspeed_enabled:
-    trainer.save_model()
-else:
-    from torch.distributed.fsdp import FullyShardedDataParallel as FSDP
-    from torch.distributed.fsdp import StateDictType, FullStateDictConfig
-
-    save_policy = FullStateDictConfig(offload_to_cpu=True, rank0_only=True)
-    with FSDP.state_dict_type(
-        trainer.model, StateDictType.FULL_STATE_DICT, save_policy
-    ):
-        trainer.save_model()
