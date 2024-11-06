@@ -17,7 +17,7 @@ pip install -r requirements.txt
 Run the corresponding script in the scripts folder. If nothing goes wrong, only the .sh script and config file need to be changed.
 
 ### ET
-Taking Qwen2.5 as an example, set `dataset` to `helpsteer2_et` in POJudge/configs/train/qwen2.5_full_sft.yaml, and set the config file parameter of train_sft.sh to configs/train/qwen2.5_full_sft.yaml.
+Taking Qwen2.5 as an example, set `dataset` to `helpsteer2_et` in POJudge/configs/train/qwen2.5_full_sft.yaml, and set the config file parameter of `train_sft.sh` to `configs/train/qwen2.5_full_sft.yaml`.
 ```
 cd POEnhancer/POJudge
 nohup bash scripts/train_sft.sh > et.log 2>&1 &
