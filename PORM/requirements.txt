@@ -187,7 +187,6 @@ vllm==0.5.3.post1
 vllm-flash-attn==2.5.9.post1
 wandb==0.18.3
 watchfiles==0.22.0
-wavedrom==2.0.3.post3
 wcwidth==0.2.13
 websockets==11.0.3
 xformers==0.0.27
