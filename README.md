@@ -1,5 +1,5 @@
 ## Environment Setup
-This project requires two distinct environments for training and evaluation:
+This project requires two distinct environments:
 ```
 git clone git@github.com:Joe-Hall-Lee/POEnhancer.git
 
