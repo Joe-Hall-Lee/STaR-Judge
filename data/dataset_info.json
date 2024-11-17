@@ -44,8 +44,17 @@
     "helpsteer2_sft": {
         "file_name": "helpsteer2_sft.json"
     },
-    "helpsteer_et": {
-        "file_name": "helpsteer_et.json",
+    "helpsteer2_et": {
+        "file_name": "helpsteer2_et.json",
+        "columns": {
+            "prompt": "instruction",
+            "query": "input",
+            "response": "output",
+            "system": "system"
+        }
+    },
+    "helpsteer2_et_qwen2.5": {
+        "file_name": "helpsteer2_et_qwen2.5.json",
         "columns": {
             "prompt": "instruction",
             "query": "input",

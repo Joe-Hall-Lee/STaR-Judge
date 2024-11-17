@@ -1,4 +1,5 @@
 *.log
+*.out
 __pycache__
 **/__pycache__/
 wandb

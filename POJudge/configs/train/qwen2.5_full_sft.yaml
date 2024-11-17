@@ -7,7 +7,7 @@ finetuning_type: full
 
 ### dataset
 dataset_dir: ../data
-dataset: helpsteer2_sft
+dataset: helpsteer2_et_qwen2.5
 template: qwen
 cutoff_len: 1024
 max_samples: 100000
@@ -15,15 +15,15 @@ overwrite_cache: true
 preprocessing_num_workers: 16
 
 ### output
-output_dir: ../output/Qwen2.5-3B-Instruct-helpsteer2_sft_1e-5
+output_dir: ../output/Qwen2.5-3B-Instruct-helpsteer2_targeted_et_lr_2e-5
 logging_steps: 1
 save_steps: 1000
 overwrite_output_dir: true
 
 ### train
-per_device_train_batch_size: 8
-gradient_accumulation_steps: 8
-learning_rate: 1.0e-5
+per_device_train_batch_size: 2
+gradient_accumulation_steps: 16
+learning_rate: 2.0e-5
 num_train_epochs: 3.0
 lr_scheduler_type: cosine
 warmup_ratio: 0.003
