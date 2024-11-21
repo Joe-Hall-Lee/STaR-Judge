@@ -11,8 +11,8 @@
     "offsetbias_sft": {
         "file_name": "offsetbias_sft.json"
     },
-    "offsetbias_et": {
-        "file_name": "offsetbias_et.json",
+    "helpsteer_et": {
+        "file_name": "helpsteer_et.json",
         "columns": {
             "prompt": "instruction",
             "query": "input",
@@ -20,8 +20,8 @@
             "system": "system"
         }
     },
-    "judgelm_dpo": {
-        "file_name": "judgelm_dpo.json",
+    "helpsteer_dpo": {
+        "file_name": "helpsteer_dpo.json",
         "ranking": true,
         "columns": {
             "prompt": "instruction",
@@ -29,11 +29,11 @@
             "rejected": "rejected"
         }
     },
-    "judgelm_sft": {
-        "file_name": "judgelm_sft.json"
+    "helpsteer_sft": {
+        "file_name": "helpsteer_sft.json"
     },
-    "helpsteer2_dpo": {
-        "file_name": "helpsteer2_dpo.json",
+    "unified_dpo": {
+        "file_name": "unified_dpo.json",
         "ranking": true,
         "columns": {
             "prompt": "instruction",
@@ -41,11 +41,17 @@
             "rejected": "rejected"
         }
     },
-    "helpsteer2_sft": {
-        "file_name": "helpsteer2_sft.json"
+    "unified_sft": {
+        "file_name": "unified_sft.json",
+	"columns": {
+            "prompt": "instruction",
+            "query": "input",
+            "response": "output",
+            "system": "system"
+        }
     },
-    "helpsteer2_et": {
-        "file_name": "helpsteer2_et.json",
+    "unified_et": {
+        "file_name": "unified_et.json",
         "columns": {
             "prompt": "instruction",
             "query": "input",
@@ -53,8 +59,17 @@
             "system": "system"
         }
     },
-    "helpsteer2_et_qwen2.5": {
-        "file_name": "helpsteer2_et_qwen2.5.json",
+    "helpsteer_et_qwen2.5": {
+        "file_name": "helpsteer_et_qwen2.5.json",
+        "columns": {
+            "prompt": "instruction",
+            "query": "input",
+            "response": "output",
+            "system": "system"
+        }
+    },
+    "judgelm_et": {
+        "file_name": "judgelm_et.json",
         "columns": {
             "prompt": "instruction",
             "query": "input",

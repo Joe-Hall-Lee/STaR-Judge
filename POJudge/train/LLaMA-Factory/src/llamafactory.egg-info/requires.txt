@@ -1,6 +1,6 @@
-transformers<=4.45.2,>=4.41.2
-datasets<=2.21.0,>=2.16.0
-accelerate<=0.34.2,>=0.30.1
+transformers<=4.46.1,>=4.41.2
+datasets<=3.1.0,>=2.16.0
+accelerate<=1.0.1,>=0.34.0
 peft<=0.12.0,>=0.11.1
 trl<=0.9.6,>=0.8.6
 gradio<5.0.0,>=4.0.0
@@ -20,6 +20,10 @@ packaging
 pyyaml
 numpy<2.0.0
 av
+tyro<0.9.0
+
+[adam-mini]
+adam-mini
 
 [aqlm]
 aqlm[gpu]>=1.1.0
@@ -34,9 +38,10 @@ badam>=1.2.1
 bitsandbytes>=0.39.0
 
 [deepspeed]
-deepspeed>=0.10.0
+deepspeed<=0.14.4,>=0.10.0
 
 [dev]
+pre-commit
 ruff
 pytest
 
@@ -53,6 +58,9 @@ auto-gptq>=0.5.0
 [hqq]
 hqq
 
+[liger-kernel]
+liger-kernel
+
 [metrics]
 nltk
 jieba
@@ -60,6 +68,9 @@ rouge-chinese
 
 [modelscope]
 modelscope
+
+[openmind]
+openmind
 
 [qwen]
 transformers_stream_generator
@@ -73,4 +84,4 @@ torch-npu==2.1.0.post3
 decorator
 
 [vllm]
-vllm>=0.4.3
+vllm<0.6.4,>=0.4.3

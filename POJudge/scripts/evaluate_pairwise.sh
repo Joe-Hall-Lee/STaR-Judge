@@ -5,9 +5,9 @@
 #SBATCH --gres=gpu:1  # 使用 gpu 数量，如果 2 个 gpu 写成 gpu:2
 #SBATCH --partition=gpus  # 分区默认即可
 
-export CUDA_VISIBLE_DEVICES=2
+export CUDA_VISIBLE_DEVICES=6
 python eval/run_bench.py \
-    --name Mistral-7B-Instruct-v0.3-helpsteer2_et_lr_1e-6 \
-    --config configs/eval/mistral-7b.yaml \
+    --name Qwen2.5-3B-Instruct-judgelm_et_lr_1e-5_epoch_1 \
+    --config configs/eval/qwen2.5-3b.yaml \
     --benchmarks llmbar,hhh,mtbench,biasbench,judgelm \
     --data-path ../data

@@ -7,7 +7,7 @@ finetuning_type: full
 
 ### dataset
 dataset_dir: ../data
-dataset: helpsteer2_et
+dataset: helpsteer_et
 template: llama2
 cutoff_len: 1024
 max_samples: 100000
@@ -15,7 +15,7 @@ overwrite_cache: true
 preprocessing_num_workers: 16
 
 ### output
-output_dir: ../output/Llama-2-13B-chat-helpsteer2_et_lr_2e-5
+output_dir: ../output/Llama-2-13b-chat-helpsteer_targeted_et_lr_2e-5
 logging_steps: 1
 save_steps: 1000
 overwrite_output_dir: true

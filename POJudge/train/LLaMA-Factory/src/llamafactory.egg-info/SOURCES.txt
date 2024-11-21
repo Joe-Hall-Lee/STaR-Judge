@@ -1,3 +1,5 @@
+LICENSE
+MANIFEST.in
 README.md
 pyproject.toml
 requirements.txt
@@ -27,6 +29,7 @@ src/llamafactory/data/collator.py
 src/llamafactory/data/data_utils.py
 src/llamafactory/data/formatter.py
 src/llamafactory/data/loader.py
+src/llamafactory/data/mm_plugin.py
 src/llamafactory/data/parser.py
 src/llamafactory/data/preprocess.py
 src/llamafactory/data/template.py
@@ -63,6 +66,7 @@ src/llamafactory/model/model_utils/__init__.py
 src/llamafactory/model/model_utils/attention.py
 src/llamafactory/model/model_utils/checkpointing.py
 src/llamafactory/model/model_utils/embedding.py
+src/llamafactory/model/model_utils/liger_kernel.py
 src/llamafactory/model/model_utils/longlora.py
 src/llamafactory/model/model_utils/misc.py
 src/llamafactory/model/model_utils/mod.py

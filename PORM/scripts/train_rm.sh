@@ -2,20 +2,20 @@
 
 export NCCL_P2P_DISABLE=1
 export WANDB_MODE=offline
-export CUDA_VISIBLE_DEVICES=4,5,6,7
+export CUDA_VISIBLE_DEVICES=6,7
 
 
-dataset_name='../data/helpsteer2_dpo.json'
-base_model='../output/Mistral-7B-Instruct-v0.3-helpsteer2_orpo_0.01_lr_1e-5_epoch_3'
+dataset_name='../data/unified_dpo.json'
+base_model='../models/gemma-2b-it'
 log_dir='save_reward_models'
 main_process_port=12541
 
-n_gpu=4
-learning_rate=1e-5
+n_gpu=2
+learning_rate=2e-6
 max_length=1024
-num_train_epochs=3
-per_device_train_batch_size=4
-gradient_accumulation_steps=8
+num_train_epochs=1
+per_device_train_batch_size=16
+gradient_accumulation_steps=16
 
 accelerate launch --num_processes ${n_gpu} \
     --main_process_port ${main_process_port} \
