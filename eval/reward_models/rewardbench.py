@@ -99,7 +99,7 @@ class Args:
     """Trust remote code."""
     debug: bool = False
     """Debug mode."""
-    output_dir: str = "results/"
+    output_dir: str = "result/"
     """The output directory to save results."""
     save_all: bool = False
     """Save all results."""
@@ -309,6 +309,7 @@ def rewardbench(args: Args):
     # primary set compiles slightly more information
     dataset, subsets = load_eval_dataset(
         core_set=True,
+        dataset=args.dataset,
         conv=conv,
         custom_dialogue_formatting=False,
         tokenizer=tokenizer,

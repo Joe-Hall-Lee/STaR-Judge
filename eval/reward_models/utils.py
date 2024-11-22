@@ -28,7 +28,7 @@ from transformers import PreTrainedTokenizer
 from .models import REWARD_MODEL_CONFIG
 
 # HuggingFace Hub locations
-CORE_EVAL_SET = "../data/rewardbench/filtered.json"
+CORE_EVAL_SET = "data/rewardbench/filtered.json"
 EXTRA_PREF_SETS = "allenai/pref-test-sets"
 BON_CANDIDATES = "ai2-adapt-dev/HERM_BoN_candidates"  # private until officially supported
 EVAL_REPO = "allenai/reward-bench-results"  # data repo to upload results
@@ -150,147 +150,9 @@ def map_conversations_testsets(example):
     return example
 
 
-def load_and_process_dataset(
-    dataset_name: str,
-    split: str = "train",
-    json: bool = False,
-    conv: Conversation = None,
-    tokenizer: PreTrainedTokenizer = None,
-    logger: logging.Logger = None,
-    prioritize_instructions: bool = False,
-) -> Dataset:
-    """
-    Load a preference dataset or an instruction dataset from the datasets library.
-    Works for both preference datasets (with chosen/rejected) and SFT datasets (with messages).
-
-    Expects the data to follow one of these schemas:
-    1. Preference data:
-       - prompt (string): question
-       - chosen (list): all turns of the conversation (including the prompt), chosen answer
-       - rejected (list): all turns of the conversation (including the prompt), rejected answer
-    2. Instruction data:
-       - messages (list): all turns of the conversation
-
-    Removes all excess columns, only returns processed data in order.
-
-    Args:
-        dataset_name (str): The name of the dataset to load (HuggingFace or local directory)
-        split (str): The split of the dataset to load (train, validation, test, ...)
-        json (bool): Whether to load the dataset from a JSON file
-        conv (Conversation): FastChat conversation template
-        tokenizer (PreTrainedTokenizer): HuggingFace tokenizer
-        logger (logging.Logger): Logger object
-        prioritize_instructions (bool): If True, prioritize processing as instruction data when both types are present
-
-    Returns:
-        dataset (Dataset): The loaded dataset with prompt, text_chosen, and text_rejected columns for preference data,
-                           or prompt and response columns for instruction data.
-    """
-    if json:
-        dataset = load_dataset("json", data_files=dataset_name)
-    else:
-        dataset = load_dataset(dataset_name, split=split)
-
-    # if datasetdict, flatten all splits
-    if isinstance(dataset, DatasetDict):
-        available_splits = list(dataset.keys())
-        datasets_to_combine = [dataset[split] for split in available_splits]
-        dataset = concatenate_datasets(datasets_to_combine)
-
-    # Handle column renaming to track prompts
-    if "question" in dataset.column_names and "prompt" not in dataset.column_names:
-        dataset = dataset.rename_column("question", "prompt")
-    if "input" in dataset.column_names and "prompt" not in dataset.column_names:
-        dataset = dataset.rename_column("input", "prompt")
-
-    features = dataset.features
-
-    # Determine if it's preference data or instruction data
-    has_preference_data = "chosen" in dataset.column_names and "rejected" in dataset.column_names
-    has_instruction_data = "messages" in dataset.column_names
-
-    # Decide which processing to use based on the prioritize_instructions flag
-    if prioritize_instructions and has_instruction_data:
-        is_preference_data = False
-        if logger:
-            logger.info("Processing as instruction data (prioritized)")
-    elif has_preference_data:
-        is_preference_data = True
-        if logger:
-            logger.info("Processing as preference data")
-    elif has_instruction_data:
-        is_preference_data = False
-        if logger:
-            logger.info("Processing as instruction data")
-    else:
-        raise ValueError(
-            "Dataset format not recognized. It should contain either 'chosen' and 'rejected'"
-            " columns for preference data, or a 'messages' column for instruction data."
-        )
-
-    # # Process the data for input to RM
-    # def process_preference_data(example):
-    #     print(example)
-    #     print("-----------------------------")
-    #     example["prompt"] = example["chosen"][:-1]
-    #     example["chosen"] = example["chosen"][-1]["content"]
-    #     example["rejected"] = example["rejected"][-1]["content"]
-    #     return example
-    # Process the data for input to RM
-    def process_preference_data(example):
-        example["prompt"] = example["prompt"]
-        example["chosen"] = example["chosen"]
-        example["rejected"] = example["rejected"]
-        return example
-
-    def process_instruction_data(example):
-        messages = example["messages"]
-        example["prompt"] = messages[0]["content"]
-        return example
-
-    if is_preference_data:
-        if "prompt" not in dataset.column_names or not isinstance(features["prompt"], list):
-            dataset = dataset.map(
-                process_preference_data,
-                num_proc=8,
-                load_from_cache_file=False,
-            )
-    else:
-        dataset = dataset.map(
-            process_instruction_data,
-            num_proc=8,
-            load_from_cache_file=False,
-        )
-
-    # Tokenize the data
-    usable_tokenizer = check_tokenizer_chat_template(tokenizer)
-
-    assert conv is not None or usable_tokenizer, "Either conv or a tokenizer with a chat template must be provided."
-
-    if usable_tokenizer:
-        if logger is not None:
-            logger.info("*** Preparing dataset with HF Transformers ***")
-        dataset = dataset.map(
-            prepare_dialogue_from_tokenizer,
-            fn_kwargs={"tokenizer": tokenizer, "ift": not is_preference_data},
-            num_proc=8,
-            load_from_cache_file=False,
-        )
-    else:
-        if logger is not None:
-            logger.info("*** Preparing dataset with FastChat ***")
-        dataset = dataset.map(
-            prepare_dialogue,
-            fn_kwargs={"dialogue_template": conv, "ift": not is_preference_data},
-            num_proc=8,
-            load_from_cache_file=False,
-        )
-
-    return dataset
-
-
 def load_eval_dataset(
     core_set: bool = True,
+    dataset: str = CORE_EVAL_SET,
     custom_dialogue_formatting: bool = False,
     conv: Conversation = None,
     tokenizer: PreTrainedTokenizer = None,
@@ -319,7 +181,7 @@ def load_eval_dataset(
     """
 
     raw_dataset = []
-    with open(CORE_EVAL_SET, 'r') as file:
+    with open(dataset, 'r') as file:
         for line in file:
             try:
                 entry = json.loads(line)
@@ -344,12 +206,6 @@ def load_eval_dataset(
     # Convert the lists of dictionaries to Hugging Face Datasets
     for subset_name, subdataset in modified_datasets.items():
         modified_datasets[subset_name] = Dataset.from_dict({key: [entry[key] for entry in subdataset] for key in subdataset[0]})
-
-    # Remove pku_safer and pku_better from the dict, no longer part of the benchmark
-    if "pku_safer" in modified_datasets:
-        del modified_datasets["pku_safer"]
-    if "pku_better" in modified_datasets:
-        del modified_datasets["pku_better"]
 
     # Convert the DatasetDict to a list of Dataset objects
     dataset_list = list(modified_datasets.values())

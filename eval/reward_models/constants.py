@@ -63,6 +63,7 @@ EXAMPLE_COUNTS = {
     "hep-js": 164,
     "hep-python": 164,
     "hep-rust": 164,
+    "unified-feedback": 832
 }
 
 SUBSET_MAPPING = {
@@ -97,6 +98,7 @@ SUBSET_MAPPING = {
         "hep-python",
         "hep-rust",
     ],
+    "Unified-Feedback": ["unified-feedback"]
 }
 
 SUBSET_NAME_TO_PAPER_READY = {

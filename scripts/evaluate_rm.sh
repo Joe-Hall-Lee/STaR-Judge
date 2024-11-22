@@ -8,6 +8,7 @@
 export CUDA_VISIBLE_DEVICES="6" 
 python -m eval.rewardbench.rewardbench \
     --model="save_reward_models/gemma-2b-it_test_len1024_fulltrain_2e-06_dataunified_dpo.json/logs/checkpoint-78" \
+    --dataset="data/rewardbench/filtered.json" \
     --batch_size=32 \
     --load_json \
     --save_all

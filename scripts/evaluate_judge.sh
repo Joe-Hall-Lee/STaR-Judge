@@ -8,6 +8,6 @@
 export CUDA_VISIBLE_DEVICES=6
 python eval/run_bench.py \
     --name Qwen2.5-3B-Instruct-judgelm_et_lr_1e-5_epoch_1 \
-    --config configs/eval/qwen2.5-3b.yaml \
-    --benchmarks llmbar,hhh,mtbench,biasbench,judgelm \
+    --config configs/eval/gemma-2b.yaml \
+    --benchmarks llmbar,hhh,mtbench,biasbench,rewardbench,unified-feedback \
     --data-path ../data
