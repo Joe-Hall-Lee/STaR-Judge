@@ -6,7 +6,7 @@ export CUDA_VISIBLE_DEVICES=6,7
 
 
 dataset_name='data/unified_dpo.json'
-base_model='output/gemma-2b-it-unified_sft_lr_2e-6_epoch_1'
+base_model='output/gemma-2b-it-unifed_dpo_1e-6_dpo_0.05_lr_1e-6_epoch_1'
 log_dir='output'
 main_process_port=12541
 

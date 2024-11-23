@@ -6,6 +6,6 @@
 #SBATCH --partition=gpus # 分区默认即可
 source ~/.bashrc
 WANDB_MODE=offline CUDA_VISIBLE_DEVICES="6,7"  accelerate launch \
-    --config_file ../accelerate/fsdp_config.yaml \
+    --config_file accelerate/fsdp_config.yaml \
     --main_process_port=12542 \
     train/LLaMA-Factory/src/train.py configs/train/gemma_full_sft.yaml

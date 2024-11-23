@@ -5,10 +5,11 @@
 #SBATCH --gres=gpu:1  #使用 gpu 数量，如果 2 个 gpu 写成 gpu:2
 #SBATCH --partition=gpus  # 分区默认即可
 
-export CUDA_VISIBLE_DEVICES="6" 
+export CUDA_VISIBLE_DEVICES="5" 
 python -m eval.rewardbench.rewardbench \
-    --model="save_reward_models/gemma-2b-it_test_len1024_fulltrain_2e-06_dataunified_dpo.json/logs/checkpoint-78" \
-    --dataset="data/rewardbench/filtered.json" \
+    --model="output/gemma-2b-it_test_len1024_fulltrain_2e-06_dataunified_dpo.json" \
+    --dataset="data/unified_dpo.json" \
+    --output_dir="result/unified-train/" \
     --batch_size=32 \
     --load_json \
     --save_all

@@ -58,23 +58,16 @@
             "response": "output",
             "system": "system"
         }
+   },
+   "unified_et_nosys": {
+        "file_name": "unified_et_nosys.json"
     },
-    "helpsteer_et_qwen2.5": {
-        "file_name": "helpsteer_et_qwen2.5.json",
+    "unified_et_gemma": {
+        "file_name": "unified_et_gemma.json",
         "columns": {
             "prompt": "instruction",
             "query": "input",
-            "response": "output",
-            "system": "system"
-        }
-    },
-    "judgelm_et": {
-        "file_name": "judgelm_et.json",
-        "columns": {
-            "prompt": "instruction",
-            "query": "input",
-            "response": "output",
-            "system": "system"
+            "response": "output"
         }
     }
 }

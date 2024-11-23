@@ -9,7 +9,7 @@ from module import InferenceModule, VllmModule, HfModule, OpenaiModule
 
 
 BENCHMARK_IDS = ["llmbar", "hhh", "mtbench", "biasbench",
-                 "judgelm", "helpsteer2", "helpsteer", "rewardbench"]
+                 "judgelm", "helpsteer2", "helpsteer", "rewardbench", "unified-feedback", "unified-train"]
 
 
 def make_data_row(id: int, instruction: str, response1: str, response2: str, label: int) -> dict:
@@ -131,24 +131,6 @@ def get_benchmark_data(benchmark_id: str, data_path) -> dict:
                 ))
 
         benchmark_set = {"judgelm": subset}
-    elif benchmark_id == "helpsteer2":
-        dataset = load_dataset('json', data_files=os.path.join(
-            data_path, "helpsteer2_dpo.json"))
-
-        subset = []
-        for i, row in enumerate(dataset['train']):
-            subset.append(make_data_row(
-                i, row["instruction"], row["chosen"], row["rejected"], 1))
-        benchmark_set = {"helpsteer2": subset}
-    elif benchmark_id == "helpsteer":
-        dataset = load_dataset('json', data_files=os.path.join(
-            data_path, "helpsteer_dpo.json"))
-
-        subset = []
-        for i, row in enumerate(dataset['train']):
-            subset.append(make_data_row(
-                i, row["instruction"], row["chosen"], row["rejected"], 1))
-        benchmark_set = {"helpsteer": subset}
     elif benchmark_id == "rewardbench":
         SUBSET_MAPPING = {
             "Chat": [
@@ -187,28 +169,33 @@ def get_benchmark_data(benchmark_id: str, data_path) -> dict:
         with open(os.path.join(data_path, "rewardbench/filtered.json"), "r") as fin:
             lines = [line.strip() for line in fin.readlines()]
             dataset = [json.loads(line) for line in lines]
-        for subset_name in ["Chat", "Chat-Hard", "Safety", "Reasoning"]:
+        for subset_name in ["Chat", "Chat Hard", "Safety", "Math", "Code"]:
             subset = []
-
-            raw_subset = dataset[subset_name]
-            for i, row in enumerate(raw_subset):
-                if dataset["subset"] in SUBSET_MAPPING[subset_name]:
+            for i, row in enumerate(dataset):
+                if dataset[i]["subset"] in SUBSET_MAPPING[subset_name]:
                     subset.append(make_data_row(
-                        i, row["instruction"], row["chosen"], row["rejected"], 1))
+                        i, row["prompt"], row["chosen"], row["rejected"], 1))
             benchmark_set[subset_name] = subset
     elif benchmark_id == "unified-feedback":
         dataset = []
         with open(os.path.join(data_path, "unified_eval.json"), "r") as fin:
             lines = [line.strip() for line in fin.readlines()]
             dataset = [json.loads(line) for line in lines]
-        for subset_name in ["unified-feedback"]:
-            subset = []
-            raw_subset = dataset[subset_name]
-            for i, row in enumerate(raw_subset):
-                if dataset["subset"] in SUBSET_MAPPING[subset_name]:
-                    subset.append(make_data_row(
-                        i, row["instruction"], row["chosen"], row["rejected"], 1))
-            benchmark_set[subset_name] = subset
+        subset = []
+        for i, row in enumerate(dataset):
+            if dataset[i]["subset"] == "unified-feedback":
+                subset.append(make_data_row(i, row["prompt"], row["chosen"], row["rejected"], 1))
+        benchmark_set["unified-feedback"] = subset
+    elif benchmark_id == "unified-train":
+        dataset = load_dataset('json', data_files=os.path.join(
+            data_path, "unified_dpo.json"))
+
+        subset = []
+        for i, row in enumerate(dataset['train']):
+            subset.append(make_data_row(
+                i, row["instruction"], row["chosen"], row["rejected"], 1))
+
+        benchmark_set["unified-train"] = subset
     else:
         raise ValueError(benchmark_id)
 
