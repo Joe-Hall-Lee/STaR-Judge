@@ -5,9 +5,9 @@
 #SBATCH --gres=gpu:1  # 使用 gpu 数量，如果 2 个 gpu 写成 gpu:2
 #SBATCH --partition=gpus  # 分区默认即可
 
-export CUDA_VISIBLE_DEVICES=6
+export CUDA_VISIBLE_DEVICES=5
 python eval/run_bench.py \
     --name gemma-2b-it-unified_et_lr_2e-5_epoch_3 \
     --config configs/eval/gemma-2b.yaml \
-    --benchmark llmbar,hhh,mtbench,biasbench,rewardbench,unified-feedback \
+    --benchmark llmbar,hhh,mtbench,rewardbench,unified-feedback \
     --data-path data

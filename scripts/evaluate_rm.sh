@@ -7,9 +7,9 @@
 
 export CUDA_VISIBLE_DEVICES="5" 
 python -m eval.rewardbench.rewardbench \
-    --model="output/gemma-2b-it_test_len1024_fulltrain_2e-06_dataunified_dpo.json" \
-    --dataset="data/unified_dpo.json" \
-    --output_dir="result/unified-train/" \
+    --model="output/gemma-2b-it-unified_et_lr_2e-5_epoch_3" \
+    --dataset="data/rewardbench/filtered.json" \
+    --output_dir="result/rewardbench/" \
     --batch_size=32 \
     --load_json \
     --save_all

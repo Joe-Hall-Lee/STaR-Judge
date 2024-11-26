@@ -6,16 +6,16 @@ export CUDA_VISIBLE_DEVICES=6,7
 
 
 dataset_name='data/unified_dpo.json'
-base_model='output/gemma-2b-it-unifed_dpo_1e-6_dpo_0.05_lr_1e-6_epoch_1'
+base_model='output/gemma-2b-it-unifie_dpo_sft_0.05_0.5_lr_1e-6_epoch_1'
 log_dir='output'
 main_process_port=12541
 
 n_gpu=2
 learning_rate=2e-6
 max_length=1024
-num_train_epochs=1
-per_device_train_batch_size=16
-gradient_accumulation_steps=16
+num_train_epochs=3
+per_device_train_batch_size=8
+gradient_accumulation_steps=8
 
 accelerate launch --num_processes ${n_gpu} \
     --main_process_port ${main_process_port} \

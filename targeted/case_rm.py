@@ -1,86 +1,94 @@
 import json
 
+SUBSET_MAPPING = {
+    "Chat": [
+        "alpacaeval-easy",
+        "alpacaeval-length",
+        "alpacaeval-hard",
+        "mt-bench-easy",
+        "mt-bench-med",
+    ],
+    "Chat Hard": [
+        "mt-bench-hard",
+        "llmbar-natural",
+        "llmbar-adver-neighbor",
+        "llmbar-adver-GPTInst",
+        "llmbar-adver-GPTOut",
+        "llmbar-adver-manual",
+    ],
+    "Safety": [
+        "refusals-dangerous",
+        "refusals-offensive",
+        "xstest-should-refuse",
+        "xstest-should-respond",
+        "donotanswer",
+    ],
+    "Math": ["math-prm"],
+    "Code": [
+        "hep-cpp",
+        "hep-go",
+        "hep-java",
+        "hep-js",
+        "hep-python",
+        "hep-rust",
+    ],
+    "unified-feedback": ["unified-feedback"]
+}
 
-def calculate_percentage(file1_path, file2_path):
-    try:
-        # Read the first JSON file
-        with open(file1_path, 'r') as file1:
-            data1 = json.load(file1)
+def calculate_percentage(judge_file, rm_file):
+    # 加载 judge 数据
+    with open(judge_file, 'r') as f:
+        judge_data = json.load(f)
 
-        # Read the second JSON file
-        with open(file2_path, 'r') as file2:
-            data2 = json.load(file2)
+    # 加载 rm 数据
+    rm_data = []
+    with open(rm_file, 'r') as f:
+        for line in f:
+            rm_data.append(json.loads(line))
 
-        # Iterate through all top-level keys in the first JSON file
-        for key in data1.keys():
-            # Check if the key exists in the second file and both values are lists
-            if key in data2 and isinstance(data1[key], list) and isinstance(data2[key], list):
-                list1 = data1[key]
-                list2 = data2[key]
+    # 遍历每个 SUBSET
+    for subset in judge_data:
+        count = 0
+        total = 0
 
-                # Check if the lengths of the lists are the same
-                if len(list1) != len(list2):
-                    print(f"Error: Key '{key}' has different number of items in the two files.")
-                    continue
+        # 遍历 judge 中的每一项
+        for item in judge_data[subset]:
+            # 根据 label 判断 judge 的 chosen 是哪个 response
+            judge_chosen = item["response1"].strip() if item["label"] == 1 else item["response2"].strip()
+            judge_rejected = item["response2"].strip() if item["label"] == 1 else item["response1"].strip()
 
-                # Initialize a counter for matching conditions
-                count = 0
-                total_items = len(list1)
+            # 遍历 rm 数据，找到匹配的项
+            matched_rm = None
+            for rm_item in rm_data:
+                if rm_item['subset'] in SUBSET_MAPPING.get(subset, []):
+                    # 比较 judge 的 chosen 是否匹配 rm 的 chosen 或 rejected（strip 处理）
+                    if judge_chosen == rm_item['chosen'].strip() and judge_rejected == rm_item['rejected'].strip():
+                        matched_rm = rm_item
+                        break
 
-                # Iterate through the lists and compare the data
-                for i in range(total_items):
-                    orig1 = list1[i]["result"]["orig"]
-                    orig2 = list2[i]["result"]["orig"]
-
-                    # Check the condition
-                    if orig1["is_correct"] == True and orig2["is_correct"] == False:
-                        count += 1
-                    swap1 = list1[i]["result"]["swap"]
-                    swap2 = list2[i]["result"]["swap"]
-
-                    # Check the condition
-                    if swap1["is_correct"] == True and swap2["is_correct"] == False:
-                        count += 1 
-
-                total_items = 2 * total_items
-                # Calculate the percentage
-                percentage = (count / total_items) * 100 if total_items > 0 else 0
-
-                # Print the results for the current key
-                print(f"Key: '{key}' -> {count}/{total_items} items match the condition. Percentage: {percentage:.2f}%")
-
+            # 如果找到匹配项，进行后续计算
+            if matched_rm:
+                total += 1
+                if item['result']['orig']['is_correct'] and matched_rm['results'] == 0:
+                    count += 1
             else:
-                # If the key is missing in the second file or is not a list, print a warning
-                print(f"Warning: Key '{key}' is missing in the second file or is not a list.")
+                raise Exception('ERROR!')
 
-    except Exception as e:
-        # Print any errors encountered during execution
-        print(f"An error occurred: {e}")
+        # 计算百分比
+        percentage = (count / total) * 100 if total > 0 else 0
+        print(f"子集 '{subset}' 的 Judge判对而rm判错的百分比 {count}/{total}：{percentage:.2f}%")
 
-instruct_name = "gemma-2b-it"
-finetune_name = "gemma-2b-it-unified_et_lr_2e-6_epoch_1"
+judge = 'gemma-2b-it'
+rm = 'gemma-2b-it_test_len1024_fulltrain_2e-06_dataunified_dpo.json_outputs.jsonl'
+# 文件路径
+judge_file_path = f"../result/{judge}/rewardbench.json"
+rm_file_path = f"../result/rewardbench/output/{rm}"
 
-file1_path = f"../result/{instruct_name}/llmbar.json"
-file2_path = f"../result/{finetune_name}/llmbar.json"
+# 调用函数
+calculate_percentage(judge_file_path, rm_file_path)
+# 文件路径
+judge_file_path = f"../result/{judge}/unified-feedback.json"
+rm_file_path = f"../result/unified-feedback/output/{rm}"
 
-calculate_percentage(file1_path, file2_path)
-
-file1_path = f"../result/{instruct_name}/mtbench.json"
-file2_path = f"../result/{finetune_name}/mtbench.json"
-
-calculate_percentage(file1_path, file2_path)
-
-file1_path = f"../result/{instruct_name}/hhh.json"
-file2_path = f"../result/{finetune_name}/hhh.json"
-
-calculate_percentage(file1_path, file2_path)
-
-file1_path = f"../result/{instruct_name}/unified-feedback.json"
-file2_path = f"../result/{finetune_name}/unified-feedback.json"
-
-calculate_percentage(file1_path, file2_path)
-
-file1_path = f"../result/{instruct_name}/rewardbench.json"
-file2_path = f"../result/{finetune_name}/rewardbench.json"
-
-calculate_percentage(file1_path, file2_path)
+# 调用函数
+calculate_percentage(judge_file_path, rm_file_path)

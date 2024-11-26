@@ -64,7 +64,7 @@ EXAMPLE_COUNTS = {
     "hep-python": 164,
     "hep-rust": 164,
     "unified-feedback": 832,
-    "unified-train": 40000
+    "unified-train": 20000
 }
 
 SUBSET_MAPPING = {
