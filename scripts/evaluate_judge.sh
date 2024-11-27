@@ -7,7 +7,7 @@
 
 export CUDA_VISIBLE_DEVICES=5
 python eval/run_bench.py \
-    --name gemma-2b-it-unified_et_lr_2e-5_epoch_3 \
+    --name gemma-2b-it_test_len1024_fulltrain_2e-06_dataunified_dpo_gemma.json \
     --config configs/eval/gemma-2b.yaml \
     --benchmark llmbar,hhh,mtbench,rewardbench,unified-feedback \
     --data-path data

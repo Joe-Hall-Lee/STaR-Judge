@@ -58,7 +58,7 @@ def calculate_percentage(file1_path, file2_path):
         print(f"An error occurred: {e}")
 
 instruct_name = "gemma-2b-it"
-finetune_name = "gemma-2b-it-unified_et_lr_2e-5_epoch_3"
+finetune_name = "gemma-2b-it-unified_both_targeted_et_lr_2e-5_epoch_5"
 
 file1_path = f"../result/{instruct_name}/llmbar.json"
 file2_path = f"../result/{finetune_name}/llmbar.json"

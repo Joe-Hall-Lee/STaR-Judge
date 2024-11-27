@@ -7,7 +7,7 @@ finetuning_type: full
 
 ### dataset
 dataset_dir: data
-dataset: unified_et_nosys
+dataset: webgpt_et_nosys
 template: gemma
 cutoff_len: 1024
 max_samples: 100000
@@ -15,7 +15,7 @@ overwrite_cache: true
 preprocessing_num_workers: 16
 
 ### output
-output_dir: output/gemma-2b-it-unified_et_lr_2e-5_epoch_3
+output_dir: output/gemma-2b-it-webgpt_et_lr_2e-5_epoch_3
 logging_steps: 1
 save_steps: 1000
 overwrite_output_dir: true

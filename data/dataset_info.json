@@ -20,8 +20,8 @@
             "system": "system"
         }
     },
-    "helpsteer_dpo": {
-        "file_name": "helpsteer_dpo.json",
+    "helpsteer_dpo_gemma": {
+        "file_name": "helpsteer_dpo_gemma.json",
         "ranking": true,
         "columns": {
             "prompt": "instruction",
@@ -59,8 +59,8 @@
             "system": "system"
         }
    },
-   "unified_et_nosys": {
-        "file_name": "unified_et_nosys.json"
+   "webgpt_et_nosys": {
+        "file_name": "webgpt_et_nosys.json"
     },
     "unified_et_gemma": {
         "file_name": "unified_et_gemma.json",
