@@ -61,8 +61,8 @@ You should answer using ONLY "Output (a)" or "Output (b)". Do NOT output any oth
         json.dump(json_list, file, indent=4)
 
 
-input_file_path = '../result/Qwen2.5-3B-Instruct-arena_et_lr_1e-5_epoch_3/arena.json'
-output_file_path = '../data/arena_et_qwen2.5.json'
+input_file_path = '../result/Llama-3.2-3B-Instruct-arena_lr_1e-5_epoch_3/arena.json'
+output_file_path = '../data/arena_et_llama.json'
 
 convert_json_to_target_format(input_file_path, output_file_path)
 

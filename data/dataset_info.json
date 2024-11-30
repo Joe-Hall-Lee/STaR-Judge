@@ -79,8 +79,8 @@
 	    "system": "system"
         }
     },
-    "arena_et_qwen2.5": {
-        "file_name": "arena_et_qwen2.5.json",
+    "arena_et_llama": {
+        "file_name": "arena_et_llama.json",
         "columns": {
             "prompt": "instruction",
             "query": "input",
