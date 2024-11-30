@@ -32,8 +32,8 @@
     "helpsteer_sft": {
         "file_name": "helpsteer_sft.json"
     },
-    "unified_dpo": {
-        "file_name": "unified_dpo.json",
+    "arena_dpo": {
+        "file_name": "arena_dpo.json",
         "ranking": true,
         "columns": {
             "prompt": "instruction",
@@ -41,8 +41,8 @@
             "rejected": "rejected"
         }
     },
-    "unified_sft": {
-        "file_name": "unified_sft.json",
+    "arena_et": {
+        "file_name": "arena_et.json",
 	"columns": {
             "prompt": "instruction",
             "query": "input",
@@ -50,8 +50,8 @@
             "system": "system"
         }
     },
-    "unified_et": {
-        "file_name": "unified_et.json",
+    "webgpt_et": {
+        "file_name": "webgpt_et.json",
         "columns": {
             "prompt": "instruction",
             "query": "input",
@@ -62,12 +62,30 @@
    "webgpt_et_nosys": {
         "file_name": "webgpt_et_nosys.json"
     },
-    "unified_et_gemma": {
-        "file_name": "unified_et_gemma.json",
+    "webgpt_et_gemma": {
+        "file_name": "webgpt_et_gemma.json",
         "columns": {
             "prompt": "instruction",
             "query": "input",
             "response": "output"
+        }
+    },
+    "webgpt_et_qwen2.5": {
+        "file_name": "webgpt_et_qwen2.5.json",
+        "columns": {
+            "prompt": "instruction",
+            "query": "input",
+            "response": "output",
+	    "system": "system"
+        }
+    },
+    "arena_et_qwen2.5": {
+        "file_name": "arena_et_qwen2.5.json",
+        "columns": {
+            "prompt": "instruction",
+            "query": "input",
+            "response": "output",
+            "system": "system"
         }
     }
 }

@@ -1,7 +1,7 @@
 prompt: gemma
 vllm_args:
   model_args:
-    model: output/gemma-2b-it-unifie_dpo_sft_0.05_0.5_lr_1e-6_epoch_1_et_lr_2e-5_epoch_3
+    model: output/Qwen2.5-3B-Instruct-webgpt_et_lr_1e-6_epoch_1
     dtype: float16
     tensor_parallel_size: 1
     trust_remote_code: true

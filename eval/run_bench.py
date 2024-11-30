@@ -8,8 +8,7 @@ from datasets import load_dataset
 from module import InferenceModule, VllmModule, HfModule, OpenaiModule
 
 
-BENCHMARK_IDS = ["llmbar", "hhh", "mtbench", "biasbench",
-                 "judgelm", "helpsteer2", "helpsteer", "rewardbench", "unified-feedback", "unified-train"]
+BENCHMARK_IDS = ["llmbar", "hhh", "mtbench", "biasbench", "webgpt", "rewardbench", "arena"]
 
 
 def make_data_row(id: int, instruction: str, response1: str, response2: str, label: int) -> dict:
@@ -186,16 +185,26 @@ def get_benchmark_data(benchmark_id: str, data_path) -> dict:
             if dataset[i]["subset"] == "unified-feedback":
                 subset.append(make_data_row(i, row["prompt"], row["chosen"], row["rejected"], 1))
         benchmark_set["unified-feedback"] = subset
-    elif benchmark_id == "unified-train":
+    elif benchmark_id == "webgpt":
         dataset = load_dataset('json', data_files=os.path.join(
-            data_path, "unified_dpo.json"))
+            data_path, "webgpt_dpo.json"))
 
         subset = []
         for i, row in enumerate(dataset['train']):
             subset.append(make_data_row(
                 i, row["instruction"], row["chosen"], row["rejected"], 1))
 
-        benchmark_set["unified-train"] = subset
+        benchmark_set["webgpt"] = subset
+    elif benchmark_id == "arena":
+        dataset = load_dataset('json', data_files=os.path.join(
+            data_path, "arena_dpo.json"))
+
+        subset = []
+        for i, row in enumerate(dataset['train']):
+            subset.append(make_data_row(
+                i, row["instruction"], row["chosen"], row["rejected"], 1))
+
+        benchmark_set["arena"] = subset
     else:
         raise ValueError(benchmark_id)
 

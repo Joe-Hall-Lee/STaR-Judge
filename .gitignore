@@ -9,10 +9,4 @@ save_reward_models
 model
 output
 .idea
-helpsteer_et.json
-helpsteer_sft.json
-helpsteer_dpo.json
-unified_et.json
-unified_sft.json
-unified_dpo.json
-unified_et_gemma.json
+arena_et.json
