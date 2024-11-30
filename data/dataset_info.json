@@ -29,8 +29,8 @@
             "rejected": "rejected"
         }
     },
-    "helpsteer_sft": {
-        "file_name": "helpsteer_sft.json"
+    "arena_sft": {
+        "file_name": "arena_sft.json"
     },
     "arena_dpo": {
         "file_name": "arena_dpo.json",
