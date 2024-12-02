@@ -11,3 +11,4 @@ output
 .idea
 arena_et.json
 arena_et_llama.json
+arena_dpo_et_llama3.json

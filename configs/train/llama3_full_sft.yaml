@@ -1,5 +1,5 @@
 ### model
-model_name_or_path: model/Llama-3.2-3B-Instruct
+model_name_or_path: output/Llama-3.2-3B-Instruct-arena_distilled_dpo_0.05_lr_1e-6_epoch_1
 
 ### method
 stage: sft
@@ -8,7 +8,7 @@ finetuning_type: full
 
 ### dataset
 dataset_dir: data
-dataset: arena_sft
+dataset: arena_dpo_et_llama.json
 template: llama3
 cutoff_len: 1024
 max_samples: 100000
@@ -16,7 +16,7 @@ overwrite_cache: true
 preprocessing_num_workers: 16
 
 ### output
-output_dir: output/Llama-3.2-3B-Instruct-arena_sft_lr_1e-5_epoch_3
+output_dir: output/Llama-3.2-3B-Instruct-arena_distilled_dpo_0.05_lr_1e-6_epoch_1_ditilled_et_lr_1e-5_epoch_3
 logging_steps: 1
 save_steps: 1000
 overwrite_output_dir: true

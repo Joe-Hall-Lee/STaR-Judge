@@ -87,5 +87,36 @@
             "response": "output",
             "system": "system"
         }
+    },
+    "arena_sft_llama3": {
+        "file_name": "arena_sft_llama3.json"
+    },
+    "arena_dpo_llama3": {
+        "file_name": "arena_dpo_llama3.json",
+        "ranking": true,
+        "columns": {
+            "prompt": "instruction",
+            "chosen": "chosen",
+            "rejected": "rejected"
+        }
+    },
+    "arena_sft_dpo_llama3": {
+        "file_name": "arena_sft_dpo_llama3.json",
+        "ranking": true,
+        "columns": {
+            "prompt": "instruction",
+            "chosen": "chosen",
+            "rejected": "rejected"
+        }
+    },
+    "arena_dpo_et_llama.json": {
+    "file_name": "arena_dpo_et_llama3.json",
+        "columns": {
+            "prompt": "instruction",
+            "query": "input",
+            "response": "output",
+            "system": "system"
+        }
     }
+
 }

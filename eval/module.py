@@ -70,7 +70,7 @@ class VllmModule(InferenceModule):
         self.model_name = model_args["model"]
         tokenizer_name = self.config.get("tokenizer", self.model_name)
         self.tokenizer = AutoTokenizer.from_pretrained(tokenizer_name)
-        self.model = LLM(**model_args, gpu_memory_utilization=0.4)
+        self.model = LLM(**model_args)
 
         sampling_params_args = dict(
             temperature=temperature, max_tokens=max_tokens)
