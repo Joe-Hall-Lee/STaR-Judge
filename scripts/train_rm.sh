@@ -5,8 +5,8 @@ export WANDB_MODE=offline
 export CUDA_VISIBLE_DEVICES=6,7
 
 
-dataset_name='data/unified_dpo_gemma.json'
-base_model='model/gemma-2b-it'
+dataset_name='data/arena_dpo.json'
+base_model='model/Llama-3.2-3B-Instruct'
 log_dir='output'
 main_process_port=12541
 
