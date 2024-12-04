@@ -86,12 +86,14 @@ training_args = TrainingArguments(
     ddp_find_unused_parameters=False
 )
 
-# Load the tokenizer
-tokenizer = AutoTokenizer.from_pretrained(
-    script_args.base_model, use_fast=False)
+# Load the tokenizer.
+tokenizer = AutoTokenizer.from_pretrained(script_args.base_model, use_fast=False)
 tokenizer.max_length = script_args.max_length
-if tokenizer.pad_token is None:
-    tokenizer.pad_token = tokenizer.eos_token
+if tokenizer.pad_token == None:
+    if 'Llama' in script_args.base_model:
+        tokenizer.add_special_tokens({'pad_token': '[PAD]'})
+    else:
+        tokenizer.pad_token = tokenizer.eos_token
 
 # Load datasets
 train_dataset, eval_dataset = load_train_eval_dataset(
@@ -111,10 +113,8 @@ model = AutoModelForSequenceClassification.from_pretrained(
     torch_dtype=torch.bfloat16,
     **model_params
 )
-model = model.to(torch.bfloat16) if training_args.bf16 else model.to(
-    torch.float16)
-model.resize_token_embeddings(len(tokenizer))
 
+model.resize_token_embeddings(len(tokenizer))
 model.config.pad_token_id = tokenizer.pad_token_id
 print_trainable_parameters(model)
 

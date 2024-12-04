@@ -7,7 +7,7 @@
 
 export CUDA_VISIBLE_DEVICES="5" 
 python -m eval.rewardbench.rewardbench \
-    --model="output/gemma-2b-it_test_len1024_fulltrain_2e-06_dataunified_dpo_gemma.json" \
+    --model="output/Llama-3.2-3B-Instruct_test_len1024_fulltrain_1e-05_dataarena_rm_llama.jsonl" \
     --dataset="data/rewardbench/filtered.json" \
     --output_dir="result/rewardbench/" \
     --batch_size=32 \
