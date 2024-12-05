@@ -2,10 +2,10 @@
 
 export NCCL_P2P_DISABLE=1
 export WANDB_MODE=offline
-export CUDA_VISIBLE_DEVICES=6,7
+export CUDA_VISIBLE_DEVICES=3,7
 
 
-dataset_name='data/arena_rm_llama.jsonl'
+dataset_name='data/hh-rlhf_dpo.json'
 base_model='model/Llama-3.2-3B-Instruct'
 log_dir='output'
 main_process_port=12541
