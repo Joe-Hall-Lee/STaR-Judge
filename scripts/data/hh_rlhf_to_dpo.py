@@ -40,9 +40,9 @@ def process_file(input_file_path, output_file_path, sample_size=20000):
                 print(f"Error parsing JSON: {e}")
                 continue
 
-    # 按照 total_length 排序，取最短的前 sample_size 条
+
     all_data.sort(key=lambda x: x["total_length"])
-    shortest_data = all_data[:sample_size]
+    shortest_data = all_data[10000: 10000 + sample_size]
 
     # 只提取数据，不包含 total_length
     result_data = [{"instruction": item["instruction"], "chosen": item["chosen"],
@@ -93,9 +93,9 @@ def has_multiple_turns(conversation):
 
 
 if __name__ == "__main__":
-    input_file = 'F:/CS/AI/JudgePO/data/hh-rlhf.json'  # 输入文件路径
-    output_file = 'F:/CS/AI/JudgePO/LLaMA-Factory/data/hh-rlhf_dpo.json'  # 输出文件路径
-    sample_size = 20000  # 取前 20000 条数据
+    input_file = '../../data/hh-rlhf.json'  # 输入文件路径
+    output_file = '../../data/hh-rlhf_dpo.json'  # 输出文件路径
+    sample_size = 20000  # 取 20000 条数据
 
     process_file(input_file, output_file, sample_size)
 

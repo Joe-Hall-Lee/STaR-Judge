@@ -2,7 +2,7 @@
 
 export NCCL_P2P_DISABLE=1
 export WANDB_MODE=offline
-export CUDA_VISIBLE_DEVICES=3,7
+export CUDA_VISIBLE_DEVICES=5,7
 
 
 dataset_name='data/hh-rlhf_dpo.json'

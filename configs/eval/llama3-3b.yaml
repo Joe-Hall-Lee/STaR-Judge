@@ -1,7 +1,7 @@
 prompt: llmbar
 vllm_args:
   model_args:
-    model: output/Llama-3.2-3B-Instruct-arena_distilled_dpo_0.05_lr_1e-6_epoch_1_ditilled_et_lr_1e-5_epoch_3
+    model: output/Llama-3.2-3B-Instruct-hh-rlhf_distilled_et_lr_1e-5_epoch_3
     dtype: float16
   sampling_params:
     temperature: 0

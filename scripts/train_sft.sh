@@ -5,7 +5,7 @@
 #SBATCH --gres=gpu:2  # 使用 gpu 数量，如果 2 个 gpu 写成 gpu:2
 #SBATCH --partition=gpus # 分区默认即可
 source ~/.bashrc
-WANDB_DISABLED=true CUDA_VISIBLE_DEVICES="6,7"  accelerate launch \
+WANDB_DISABLED=true CUDA_VISIBLE_DEVICES="5,7"  accelerate launch \
     --config_file accelerate/fsdp_config.yaml \
     --main_process_port=12542 \
     train/LLaMA-Factory/src/train.py configs/train/llama3_full_sft.yaml

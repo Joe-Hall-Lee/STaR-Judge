@@ -52,8 +52,8 @@ You should answer using ONLY "Output (a)" or "Output (b)". Do NOT output any oth
         json.dump(json_list, file, indent=4)
 
 
-input_file_path = 'F:/CS/AI/JudgePO/LLaMA-Factory/data/arena_dpo.json'
-output_file_path = 'F:/CS/AI/JudgePO/LLaMA-Factory/data/arena_et.json'
+input_file_path = '../../data/hh-rlhf_dpo.json'
+output_file_path = '../../data/hh-rlhf_et.json'
 
 convert_json_array_to_json(input_file_path, output_file_path)
 print("Conversion complete.")

@@ -70,8 +70,8 @@
             "response": "output"
         }
     },
-    "webgpt_et_qwen2.5": {
-        "file_name": "webgpt_et_qwen2.5.json",
+    "hh-rlhf_et_llama": {
+        "file_name": "hh-rlhf_et_llama.json",
         "columns": {
             "prompt": "instruction",
             "query": "input",
@@ -109,8 +109,8 @@
             "rejected": "rejected"
         }
     },
-    "arena_dpo_et_llama.json": {
-    "file_name": "arena_dpo_et_llama3.json",
+    "hh-rlhf_et": {
+        "file_name": "hh-rlhf_et.json",
         "columns": {
             "prompt": "instruction",
             "query": "input",
