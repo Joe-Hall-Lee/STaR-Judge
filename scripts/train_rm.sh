@@ -5,7 +5,7 @@ export WANDB_MODE=offline
 export CUDA_VISIBLE_DEVICES=5,7
 
 
-dataset_name='data/hh-rlhf_dpo.json'
+dataset_name='data/hh-rlhf_rm_llama.jsonl'
 base_model='model/Llama-3.2-3B-Instruct'
 log_dir='output'
 main_process_port=12541

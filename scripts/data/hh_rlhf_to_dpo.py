@@ -42,7 +42,7 @@ def process_file(input_file_path, output_file_path, sample_size=20000):
 
 
     all_data.sort(key=lambda x: x["total_length"])
-    shortest_data = all_data[10000: 10000 + sample_size]
+    shortest_data = all_data[20000: 20000 + sample_size]
 
     # 只提取数据，不包含 total_length
     result_data = [{"instruction": item["instruction"], "chosen": item["chosen"],
