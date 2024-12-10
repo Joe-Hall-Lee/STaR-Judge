@@ -48,7 +48,7 @@ def process_file(input_filename, output_filename):
 
 if __name__ == '__main__':
     # 输入和输出文件名
-    input_file = '../result/hh-rlhf/output/Llama-3.2-3B-Instruct-rm-hh-rlhf_outputs.jsonl'
+    input_file = '../result/hhe-rlhf/output/Llama-3.2-3B-Instruct-rm-hh-rlhf_outputs.jsonl'
     output_file = '../data/hh-rlhf_rm_llama.jsonl'
 
     process_file(input_file, output_file)

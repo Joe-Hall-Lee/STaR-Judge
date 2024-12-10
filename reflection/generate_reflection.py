@@ -102,22 +102,22 @@ def generate_reflection_with_vllm(result_file, distill_et_file, output_file, dat
         distill_result_prediction = item2["result"]["orig"]["prediction"]
         distill_conclusion_generated = "Output (a)" if distill_result_prediction == 1 else "Output (b)"
 
-        if "Output (a)" in original_conclusion and item1["label"] == 1:
+        if "Output (a)" in original_conclusion and item2["label"] == 1:
             if distill_conclusion_generated == "Output (a)":
                 continue
             chosen = original_critique + "\nTherefore, Output (a) is better."
             rejected = distill_critique + "\nTherefore, Output (b) is better."
-        elif "Output (b)" in original_conclusion and item1["label"] == 2:
+        elif "Output (b)" in original_conclusion and item2["label"] == 2:
             if distill_conclusion_generated == "Output (b)":
                 continue
             chosen = original_critique + "\nTherefore, Output (b) is better."
             rejected = distill_critique + "\nTherefore, Output (a) is better."
-        elif "Output (a)" in original_conclusion and item1["label"] == 2:
+        elif "Output (a)" in original_conclusion and item2["label"] == 2:
             if distill_conclusion_generated == "Output (a)":
                 continue
             chosen = distill_critique + "\nTherefore, Output (b) is better."
             rejected = original_critique + "\nTherefore, Output (a) is better."
-        elif "Output (b)" in original_conclusion and item1["label"] == 1:
+        elif "Output (b)" in original_conclusion and item2["label"] == 1:
             if distill_conclusion_generated == "Output (b)":
                 continue
             chosen = distill_critique + "\nTherefore, Output (a) is better."

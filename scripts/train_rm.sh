@@ -4,7 +4,6 @@ export NCCL_P2P_DISABLE=1
 export WANDB_MODE=offline
 export CUDA_VISIBLE_DEVICES=5,7
 
-
 dataset_name='data/hh-rlhf_rm_llama.jsonl'
 base_model='model/Llama-3.2-3B-Instruct'
 log_dir='output'
