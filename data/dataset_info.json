@@ -1,8 +1,9 @@
 {
-    "offsetbias_dpo": {
-        "file_name": "offsetbias_dpo.json",
+    "arena_critique": {
+        "file_name": "arena_critique.json",
         "ranking": true,
         "columns": {
+	    "system": "system",
             "prompt": "instruction",
             "chosen": "chosen",
             "rejected": "rejected"
