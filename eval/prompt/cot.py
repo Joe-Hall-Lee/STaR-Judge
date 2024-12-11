@@ -23,7 +23,7 @@ Do NOT output any other words.
 # Decision (Give a brief explanation of your evaluation followed by either "Therefore, Output (a) is better." or "Therefore, Output (b) is better." verbatim. In your explanation, you should always use "Output (a)" or "Output (b)" to refer to the two outputs respectively.):"""
 
 output_pattern = {
-    1: r"herefore, Output \(a\) is better",
-    2: r"herefore, Output \(b\) is better"
+    1: r"Output \(a\) is better",
+    2: r"Output \(b\) is better"
 }
 

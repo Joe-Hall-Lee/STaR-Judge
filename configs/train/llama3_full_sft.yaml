@@ -8,7 +8,7 @@ finetuning_type: full
 
 ### dataset
 dataset_dir: data
-dataset: hh-rlhf_et_llama
+dataset: arena_cot
 template: llama3
 cutoff_len: 1024
 max_samples: 100000
@@ -16,7 +16,7 @@ overwrite_cache: true
 preprocessing_num_workers: 16
 
 ### output
-output_dir: output/Llama-3.2-3B-Instruct-hh-rlhf_distilled_et_lr_1e-5_epoch_3
+output_dir: output/Llama-3.2-3B-Instruct-arena_cot_lr_1e-5_epoch_3
 logging_steps: 1
 save_steps: 1000
 overwrite_output_dir: true

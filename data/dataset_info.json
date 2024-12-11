@@ -12,8 +12,8 @@
     "offsetbias_sft": {
         "file_name": "offsetbias_sft.json"
     },
-    "helpsteer_et": {
-        "file_name": "helpsteer_et.json",
+    "arena_cot": {
+        "file_name": "arena_cot.json",
         "columns": {
             "prompt": "instruction",
             "query": "input",
