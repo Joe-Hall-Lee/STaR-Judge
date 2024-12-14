@@ -1,7 +1,7 @@
 prompt: cot
 vllm_args:
   model_args:
-    model: output/Llama-3.2-3B-Instruct-arena_critique_0.05_lr_1e-7_epoch_1
+    model: model/Llama-3.2-3B-Instruct
     dtype: float16
   sampling_params:
     temperature: 0

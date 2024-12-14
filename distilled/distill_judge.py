@@ -62,7 +62,7 @@ You should answer using ONLY "Output (a)" or "Output (b)". Do NOT output any oth
 
 
 input_file_path = '../result/Llama-3.2-3B-Instruct-hh-rlhf_et_lr_1e-5_epoch_3/hh-rlhf.json'
-output_file_path = '../data/hh-rlhf_et_llama.json'
+output_file_path = '../data/test.json'
 
 convert_json_to_target_format(input_file_path, output_file_path)
 

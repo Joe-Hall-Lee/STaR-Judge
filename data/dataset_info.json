@@ -12,8 +12,8 @@
     "offsetbias_sft": {
         "file_name": "offsetbias_sft.json"
     },
-    "arena_cot": {
-        "file_name": "arena_cot.json",
+    "arena_rationale": {
+        "file_name": "arena_rationale.json",
         "columns": {
             "prompt": "instruction",
             "query": "input",
@@ -21,13 +21,13 @@
             "system": "system"
         }
     },
-    "helpsteer_dpo_gemma": {
-        "file_name": "helpsteer_dpo_gemma.json",
-        "ranking": true,
+    "arena_et_cot": {
+        "file_name": "arena_et_cot.json",
         "columns": {
             "prompt": "instruction",
-            "chosen": "chosen",
-            "rejected": "rejected"
+            "system": "system",
+            "query": "input",
+	    "response": "output"
         }
     },
     "arena_sft": {

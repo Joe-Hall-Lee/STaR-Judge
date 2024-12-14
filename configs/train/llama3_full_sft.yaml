@@ -8,15 +8,15 @@ finetuning_type: full
 
 ### dataset
 dataset_dir: data
-dataset: arena_cot
+dataset: arena_et_cot
 template: llama3
-cutoff_len: 1024
+cutoff_len: 2048
 max_samples: 100000
 overwrite_cache: true
 preprocessing_num_workers: 16
 
 ### output
-output_dir: output/Llama-3.2-3B-Instruct-arena_cot_lr_1e-5_epoch_3
+output_dir: output/Llama-3.2-3B-Instruct-arena_et_cot_lr_1e-5_epoch_3
 logging_steps: 1
 save_steps: 1000
 overwrite_output_dir: true
