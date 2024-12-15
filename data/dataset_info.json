@@ -21,6 +21,15 @@
             "system": "system"
         }
     },
+    "arena_rationale_distill": {
+	"file_name": "arena_rationale_distill.json",
+        "columns": {
+            "prompt": "instruction",
+            "query": "input",
+            "response": "output",
+            "system": "system"
+        }
+    },
     "arena_et_cot": {
         "file_name": "arena_et_cot.json",
         "columns": {
@@ -51,8 +60,8 @@
             "system": "system"
         }
     },
-    "webgpt_et": {
-        "file_name": "webgpt_et.json",
+    "arena_et_cot_distill": {
+        "file_name": "arena_et_cot_distill.json",
         "columns": {
             "prompt": "instruction",
             "query": "input",

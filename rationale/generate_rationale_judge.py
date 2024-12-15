@@ -28,8 +28,12 @@ def generate_rationale(result_file, distill_et_file, output_file, data_key, mode
     updated_responses = []
 
     for item1, item2 in zip(data1[data_key], data2[data_key]):
-        if item1["result"]["orig"]["is_correct"] == True or item1["result"]["swap"]["is_correct"] == True:
-            continue
+        if item2["result"]["orig"]["is_correct"] == True:
+            if item1["result"]["orig"]["prediction"] == item2["result"]["orig"]["prediction"]:
+                continue
+        elif item2["result"]["swap"]["is_correct"] == True:
+            if item1["result"]["swap"]["prediction"] == item2["result"]["swap"]["prediction"]:
+                continue
         if item2["result"]["orig"]["prediction"] == 1:
             chosen = "Output (a)"
             rejected = "Output (b)"
