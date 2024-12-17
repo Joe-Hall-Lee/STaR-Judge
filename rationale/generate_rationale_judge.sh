@@ -4,11 +4,11 @@
 #SBATCH --gres=gpu:1  # 使用 gpu 数量，如果 2 个 gpu 写成 gpu:2
 #SBATCH --partition=gpus # 分区默认即可
 
-RESULT_FILE="../result/Llama-3.2-3B-Instruct/arena.json"
-DISTILL_ET_FILE="../result/Llama-3.2-3B-Instruct-arena_distlled_et_lr_1e-5_epoch_3/arena.json"
-OUTPUT_FILE="../data/arena_cot_et_distill_2.json"
-DATA_KEY="arena"
-MODEL_NAME="../output/Llama-3.2-3B-Instruct-arena_rationale_distill_lr_1e-5_epoch_3"
+RESULT_FILE="../result/Llama-3.2-3B-Instruct/hh-rlhf.json"
+DISTILL_ET_FILE="../result/Llama-3.2-3B-Instruct-hh-rlhf_distilled_et_lr_1e-5_epoch_3/hh-rlhf.json"
+OUTPUT_FILE="../data/hh-rlhf_cot_et_distill_2.json"
+DATA_KEY="hh-rlhf"
+MODEL_NAME="../output/Llama-3.2-3B-Instruct-hh-rlhf_rationale_distill_lr_1e-5_epoch_3"
 TEMPERATURE=0.0
 MAX_TOKENS=512
 

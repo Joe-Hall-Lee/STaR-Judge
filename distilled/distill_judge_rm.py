@@ -2,14 +2,14 @@ import json
 import os
 import random
 
-def convert_json_to_target_format(input_file, output_file):
+def convert_json_to_target_format(input_file, output_file, data_key):
     # Prepare an empty list to store the converted data
     json_list = []
 
     # Open the JSON file and read its contents
     with open(input_file, 'r') as file:
         data = json.load(file)
-        for item in data["arena"]:
+        for item in data["data_key"]:
             if item["result"]["orig"]["prediction"] == 1:
                 chosen = item["response1"]
                 rejected = item["response2"]
@@ -39,9 +39,10 @@ def convert_json_to_target_format(input_file, output_file):
         json.dump(json_list, file, indent=4)
 
 
-input_file_path = '../result/Llama-3.2-3B-Instruct-arena_et_cot_lr_1e-5_epoch_3/arena.json'
-output_file_path = '../data/arena_rm_star.json'
+input_file_path = '../result/Llama-3.2-3B-Instruct-hh-rlhf_et_cot_distill_lr_1e-5_epoch_3/hh-rlhf.json'
+output_file_path = '../data/hh-rlhf_rm_star_distill.json'
+data_key = "hh-rlhf"
 
-convert_json_to_target_format(input_file_path, output_file_path)
+convert_json_to_target_format(input_file_path, output_file_path, data_key)
 
 print("Over!")

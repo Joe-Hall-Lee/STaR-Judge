@@ -7,7 +7,7 @@
 
 export CUDA_VISIBLE_DEVICES=5
 python eval/run_bench.py \
-    --name Llama-3.2-3B-Instruct \
+    --name Llama-3.2-3B-Instruct-hh-rlhf_et_cot_distill_lr_1e-5_epoch_3 \
     --config configs/eval/llama3-3b.yaml \
-    --benchmark hh-rlhf \
+    --benchmark hh-rlhf,rewardbench \
     --data-path data

@@ -1,7 +1,7 @@
 prompt: cot
 vllm_args:
   model_args:
-    model: model/Llama-3.2-3B-Instruct
+    model: output/Llama-3.2-3B-Instruct-hh-rlhf_et_cot_distill_lr_1e-5_epoch_3
     dtype: float16
   sampling_params:
     temperature: 0

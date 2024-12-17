@@ -30,6 +30,15 @@
             "system": "system"
         }
     },
+    "hh-rlhf_rationale_distill": {
+        "file_name": "hh-rlhf_rationale_distill.json",
+        "columns": {
+            "prompt": "instruction",
+            "query": "input",
+            "response": "output",
+            "system": "system"
+        }
+    },
     "arena_et_cot": {
         "file_name": "arena_et_cot.json",
         "columns": {
@@ -121,6 +130,15 @@
     },
     "hh-rlhf_et": {
         "file_name": "hh-rlhf_et.json",
+        "columns": {
+            "prompt": "instruction",
+            "query": "input",
+            "response": "output",
+            "system": "system"
+        }
+    },
+    "hh-rlhf_et_cot_distill": {
+        "file_name": "hh-rlhf_et_cot_distill.json",
         "columns": {
             "prompt": "instruction",
             "query": "input",

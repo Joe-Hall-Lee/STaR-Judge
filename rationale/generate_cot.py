@@ -100,14 +100,16 @@ Do NOT output any other words.
         json.dump(et_list, file, indent=4)
 
 
-original_file_path = '../result/Llama-3.2-3B-Instruct/arena.json'
-distill_judge_file_path = '../result/Llama-3.2-3B-Instruct-arena_distlled_et_lr_1e-5_epoch_3/arena.json'
-cot_file_path = '../data/arena_rationale_distill.json'
-et_file_path = '../data/arena_et_cot_distill.json'
-data_key = 'arena'
+original_file_path = '../result/Llama-3.2-3B-Instruct/hh-rlhf.json'
+distill_judge_file_path = '../result/Llama-3.2-3B-Instruct-hh-rlhf_distilled_et_lr_1e-5_epoch_3/hh-rlhf.json'
+# The output file is used to train rationale generation model
+cot_output_file_path = '../data/hh-rlhf_rationale_distill.json'
+# The output file is used to train CoT ET model
+et_output_file_path = '../data/hh-rlhf_et_cot_distill.json'
+data_key = 'hh-rlhf'
 
 convert_json_to_target_format(
-    original_file_path, distill_judge_file_path, cot_file_path, et_file_path, data_key)
+    original_file_path, distill_judge_file_path, cot_output_file_path, et_output_file_path, data_key)
 
 print("Over!")
 
