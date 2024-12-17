@@ -14,7 +14,7 @@ Run the `scripts/evaluate_judge.sh` script to generate the model's Chain-of-Thou
 
 ```bash
 python eval/run_bench.py \
-    --name {model_name} \
+    --name {result_name} \
     --config {config_path} \
     --benchmark rewardbench \
     --data-path data
@@ -30,7 +30,7 @@ Run the `scripts/evaluate_judge.sh` script again to generate the ET model's eval
 
 ```bash
 python eval/run_bench.py \
-    --name {model_name} \
+    --name {result_name} \
     --config {config_path} \
     --benchmark rewardbench,arena \
     --data-path data
@@ -49,7 +49,7 @@ In the `rationale` folder:
 
 ### 7. Train the CoT ET Model
 
-Within the `rationale` folder:
+In the `rationale` folder:
 
 1. Run the `generate_rationale_judge.sh` script, then merge the `OUTPUT_FILE` from `generate_rationale_judge.sh` and the `et_output_file` from `generate_cot.py`.
 2. Use the `scripts/train_sft.sh` script to train the CoT ET model.
