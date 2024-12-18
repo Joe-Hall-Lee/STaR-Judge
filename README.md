@@ -60,7 +60,7 @@ Run the `scripts/evaluate_judge.sh` script to generate the CoT ET model's evalua
 
 ### 9. Prepare Reward Model Training Data
 
-Navigate to the `disilled` folder and run `distill_judge_rm.py` to prepare the reward model (RM) training dataset.
+Navigate to the `distilled` folder and run `distill_judge_rm.py` to prepare the reward model (RM) training dataset.
 
 ### 10. Train the Reward Model
 
