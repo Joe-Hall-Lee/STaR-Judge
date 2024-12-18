@@ -97,7 +97,7 @@ SUBSET_MAPPING = {
         "hep-python",
         "hep-rust",
     ],
-    "Unified-Feedback": ["unified-feedback"]
+    "train": ["train"]
 }
 
 SUBSET_NAME_TO_PAPER_READY = {

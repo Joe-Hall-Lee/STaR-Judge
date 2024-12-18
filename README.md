@@ -20,6 +20,10 @@ python eval/run_bench.py \
     --data-path data
 ```
 
+For calculating the accuracy of the RewardBench Reasoning category, a manual calculation is required. The formula is as follows:
+
+$\text{Reasoning Accuracy} = \frac{(\text{Math Single Accuracy} \times 984) + (\text{Code Single Accuracy} \times 984)}{1968}$
+
 ### 3. Train the ET Model
 
 Use the `scripts/train_sft.sh` script to train the ET model. Update the configuration files accordingly. For the `arena` benchmark, it is recommended to set `cutoff_len` to 2048.
@@ -38,7 +42,7 @@ python eval/run_bench.py \
 
 ### 5. Train the Distilled ET Model
 
-Navigate to the `disilled` folder and execute `distill_judge.py`. Afterward, use the `scripts/train_sft.sh` script to train the Distilled ET model.
+Navigate to the `distilled` folder and execute `distill_judge.py`. Afterward, use the `scripts/train_sft.sh` script to train the Distilled ET model.
 
 ### 6. Train the Rationale Generation Model
 

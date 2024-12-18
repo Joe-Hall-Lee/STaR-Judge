@@ -191,7 +191,7 @@ def load_eval_dataset(
                     "prompt": prompt,
                     "chosen": chosen,
                     "rejected": rejected,
-                    "subset": "unified-train",
+                    "subset": "train",
                     "id": len(raw_dataset) + 1
                 }
                 raw_dataset.append(new_entry)
