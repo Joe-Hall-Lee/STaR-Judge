@@ -5,9 +5,9 @@
 #SBATCH --gres=gpu:1  # 使用 gpu 数量，如果 2 个 gpu 写成 gpu:2
 #SBATCH --partition=gpus  # 分区默认即可
 
-export CUDA_VISIBLE_DEVICES=5
+export CUDA_VISIBLE_DEVICES=3
 python eval/run_bench.py \
-    --name Llama-3.2-3B-Instruct-hh-rlhf_et_cot_distill_lr_1e-5_epoch_3 \
+    --name Llama-3.2-3B-Instruct-webgpt_distill_et_lr_1e-5_epoch_3 \
     --config configs/eval/llama3-3b.yaml \
-    --benchmark hh-rlhf,rewardbench \
+    --benchmark rewardbench \
     --data-path data

@@ -9,7 +9,7 @@ def convert_json_to_target_format(input_file, output_file):
     # Open the JSON file and read its contents
     with open(input_file, 'r') as file:
         data = json.load(file)
-        for item in data["arena"]:
+        for item in data["webgpt"]:
             if item["result"]["orig"]["prediction"] == 1:
                 output = "Output (a)"
             elif item["result"]["orig"]["prediction"] == 2:
@@ -61,8 +61,8 @@ You should answer using ONLY "Output (a)" or "Output (b)". Do NOT output any oth
         json.dump(json_list, file, indent=4)
 
 
-input_file_path = '../result/Llama-3.2-3B-Instruct-hh-rlhf_et_lr_1e-5_epoch_3/hh-rlhf.json'
-output_file_path = '../data/test.json'
+input_file_path = '../result/Llama-3.2-3B-Instruct-webgpt_et_lr_1e-5_epoch_3/webgpt.json'
+output_file_path = '../data/webgpt_et_distill.json'
 
 convert_json_to_target_format(input_file_path, output_file_path)
 

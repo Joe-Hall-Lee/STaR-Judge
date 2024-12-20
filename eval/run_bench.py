@@ -8,7 +8,7 @@ from datasets import load_dataset
 from module import InferenceModule, VllmModule, HfModule, OpenaiModule
 
 
-BENCHMARK_IDS = ["rewardbench", "arena", "webgpt"]
+BENCHMARK_IDS = ["rewardbench", "arena", "pku", "hh-rlhf", "webgpt"]
 
 
 def make_data_row(id: int, instruction: str, response1: str, response2: str, label: int) -> dict:
@@ -83,6 +83,26 @@ def get_benchmark_data(benchmark_id: str, data_path) -> dict:
                 i, row["instruction"], row["chosen"], row["rejected"], 1))
 
         benchmark_set["arena"] = subset
+    elif benchmark_id == "pku":
+        dataset = load_dataset('json', data_files=os.path.join(
+            data_path, "pku_dpo.json"))
+
+        subset = []
+        for i, row in enumerate(dataset['train']):
+            subset.append(make_data_row(
+                i, row["instruction"], row["chosen"], row["rejected"], 1))
+
+        benchmark_set["pku"] = subset
+    elif benchmark_id == "hh-rlhf":
+        dataset = load_dataset('json', data_files=os.path.join(
+            data_path, "hh-rlhf_dpo.json"))
+
+        subset = []
+        for i, row in enumerate(dataset['train']):
+            subset.append(make_data_row(
+                i, row["instruction"], row["chosen"], row["rejected"], 1))
+
+        benchmark_set["hh-rlhf"] = subset
     elif benchmark_id == "webgpt":
         dataset = load_dataset('json', data_files=os.path.join(
             data_path, "webgpt_dpo.json"))

@@ -2,9 +2,9 @@
 
 export NCCL_P2P_DISABLE=1
 export WANDB_MODE=offline
-export CUDA_VISIBLE_DEVICES=5,7
+export CUDA_VISIBLE_DEVICES=3,4
 
-dataset_name='data/hh-rlhf_rm_star_distill.json'
+dataset_name='data/webgpt_dpo.json'
 base_model='model/Llama-3.2-3B-Instruct'
 log_dir='output'
 main_process_port=12541

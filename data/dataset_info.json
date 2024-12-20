@@ -78,11 +78,8 @@
             "system": "system"
         }
    },
-   "webgpt_et_nosys": {
-        "file_name": "webgpt_et_nosys.json"
-    },
-    "webgpt_et_gemma": {
-        "file_name": "webgpt_et_gemma.json",
+    "pku_et": {
+        "file_name": "pku_et.json",
         "columns": {
             "prompt": "instruction",
             "query": "input",
@@ -119,8 +116,8 @@
             "rejected": "rejected"
         }
     },
-    "arena_sft_dpo_llama3": {
-        "file_name": "arena_sft_dpo_llama3.json",
+    "pku_dpo": {
+        "file_name": "pku_dpo.json",
         "ranking": true,
         "columns": {
             "prompt": "instruction",
@@ -128,8 +125,8 @@
             "rejected": "rejected"
         }
     },
-    "hh-rlhf_et": {
-        "file_name": "hh-rlhf_et.json",
+    "webgpt_et": {
+        "file_name": "webgpt_et.json",
         "columns": {
             "prompt": "instruction",
             "query": "input",
@@ -137,8 +134,8 @@
             "system": "system"
         }
     },
-    "hh-rlhf_et_cot_distill": {
-        "file_name": "hh-rlhf_et_cot_distill.json",
+    "webgpt_et_distill": {
+        "file_name": "webgpt_et_distill.json",
         "columns": {
             "prompt": "instruction",
             "query": "input",
