@@ -86,8 +86,8 @@
             "response": "output"
         }
     },
-    "hh-rlhf_et_llama": {
-        "file_name": "hh-rlhf_et_llama.json",
+    "webgpt_direct_distill": {
+        "file_name": "webgpt_direct_distill.json",
         "columns": {
             "prompt": "instruction",
             "query": "input",

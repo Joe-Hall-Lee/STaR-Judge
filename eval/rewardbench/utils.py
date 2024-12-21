@@ -183,6 +183,13 @@ def load_eval_dataset(
     with open(dataset, 'r') as file:
         if "dpo" in dataset:
             data = json.load(file)
+            if "arena" in dataset:
+                subset = "arena"
+            elif "webgpt" in dataset:
+                subset = "webgpt"
+            else:
+                raise ValueError("Unknown dataset type")
+
             for item in data:
                 prompt = item["instruction"]
                 chosen = item["chosen"]
@@ -191,7 +198,7 @@ def load_eval_dataset(
                     "prompt": prompt,
                     "chosen": chosen,
                     "rejected": rejected,
-                    "subset": "train",
+                    "subset": subset,
                     "id": len(raw_dataset) + 1
                 }
                 raw_dataset.append(new_entry)
@@ -610,3 +617,4 @@ def load_model_config(model_name):
         return REWARD_MODEL_CONFIG[model_name]
     else:
         return REWARD_MODEL_CONFIG["default"]
+

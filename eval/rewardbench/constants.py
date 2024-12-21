@@ -62,7 +62,9 @@ EXAMPLE_COUNTS = {
     "hep-java": 164,
     "hep-js": 164,
     "hep-python": 164,
-    "hep-rust": 164
+    "hep-rust": 164,
+    "webgpt": 14346,
+    "arena": 20491
 }
 
 SUBSET_MAPPING = {
@@ -97,7 +99,8 @@ SUBSET_MAPPING = {
         "hep-python",
         "hep-rust",
     ],
-    "train": ["train"]
+    "webgpt": ["webgpt"],
+    "arena": ["arena"]
 }
 
 SUBSET_NAME_TO_PAPER_READY = {
@@ -132,3 +135,4 @@ SUBSET_NAME_TO_PAPER_READY = {
     "shp": "SHP",
     "summarize": "Summarize",
 }
+
