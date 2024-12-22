@@ -94,6 +94,6 @@ You should answer using ONLY "Output (a)" or "Output (b)". Do NOT output any oth
 
 if __name__ == '__main__':
     # 输入和输出文件名
-    input_file = '../result/webgpt/output/Llama-3.2-3B-Instruct_test_len1024_fulltrain_1e-05_datawebgpt_dpo.json_outputs.jsonl'
-    output_file = '../data/webgpt_et_with_rm.json'
+    input_file = '../result/arena/output/Llama-3.2-3B-Instruct_test_len1024_fulltrain_1e-05_dataarena_dpo.json_outputs.jsonl'
+    output_file = '../data/arena_et_with_rm.json'
     process_file(input_file, output_file)

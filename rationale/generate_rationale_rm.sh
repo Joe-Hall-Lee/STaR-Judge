@@ -5,7 +5,7 @@
 #SBATCH --partition=gpus # 分区默认即可
 
 INPUT="../result/arena/output/Llama-3.2-3B-Instruct_test_len1024_fulltrain_1e-05_dataarena_rm_llama.jsonl_outputs.jsonl"
-OUTPUT_FILE="../data/arena_cot_rm.json"
+OUTPUT_FILE="../data/arena_cot_distill.json"
 MODEL_NAME="../model/Llama-3.2-3B-Instruct"
 TEMPERATURE=0.0
 MAX_TOKENS=512

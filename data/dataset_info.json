@@ -142,6 +142,24 @@
             "response": "output",
             "system": "system"
         }
+    },
+    "arena_direct_distill": {
+        "file_name": "arena_direct_distill.json",
+        "columns": {
+            "prompt": "instruction",
+            "query": "input",
+            "response": "output",
+            "system": "system"
+        }
+    },
+    "arena_cot_distill": {
+        "file_name": "arena_cot_distill.json",
+        "columns": {
+            "prompt": "instruction",
+            "query": "input",
+            "response": "output",
+            "system": "system"
+        }
     }
 
 }

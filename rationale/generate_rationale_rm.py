@@ -116,11 +116,6 @@ def generate_rationale(input_file, output_file, model_name, temperature, max_tok
     # 构造新数据
     formatted_data = []
     for generated_text, item, (chosen, rejected), (response1, response2) in zip(generated_texts, processed_data, updated_labels, updated_responses):
-        if chosen == "Output (a)":
-            output = generated_text + "\nTherefore, Output (a) is better."
-        else:
-            output = generated_text + "\nTherefore, Output (b) is better."
-
         # 构造符合格式的数据
         formatted_data.append({
             "system": "You are a helpful assistant in evaluating the quality of the outputs for a given instruction. Your goal is to select the best output for the given instruction.",
@@ -146,7 +141,7 @@ Do NOT output any other words.
 
 # Decision (Give a brief explanation of your evaluation followed by either "Therefore, Output (a) is better." or "Therefore, Output (b) is better." verbatim. In your explanation, you should always use "Output (a)" or "Output (b)" to refer to the two outputs respectively.):""",
             "input": "",
-            "output": output
+            "output": generated_text
         })
 
     # 保存结果到文件
@@ -171,8 +166,7 @@ def construct_prompt(instruction, response1, response2, chosen, rejected):
 # Output (b):
 {response2}
 
-
-Given that {chosen} is better than {rejected}, please provide the rationale with a paragraph and do NOT output any other words:"""
+Given that {chosen} is better than {rejected}, please provide the rationale and end with "Therefore, {chosen} is better." (Do NOT output any other words.):"""
     return [{"role": "system", "content": system}, {"role": "user", "content": user}]
 
 
@@ -184,8 +178,8 @@ if __name__ == "__main__":
                         help="Path to the processed input JSON file.")
     parser.add_argument("--output", type=str, required=True,
                         help="Path to the output file.")
-    parser.add_argument("--model", type=str, default="gpt-4",
-                        help="Name of the vllm model to use (default: gpt-4).")
+    parser.add_argument("--model", type=str,
+                        help="Name of the vllm model to use.")
     parser.add_argument("--temperature", type=float, default=0.7,
                         help="Temperature for generation randomness.")
     parser.add_argument("--max_tokens", type=int, default=512,

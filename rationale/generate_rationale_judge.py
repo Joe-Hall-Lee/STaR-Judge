@@ -4,16 +4,10 @@ from vllm import LLM, SamplingParams
 from transformers import AutoTokenizer
 
 
-def generate_rationale(result_file, distill_et_file, output_file, data_key, model_name, temperature, max_tokens):
+def generate_rationale(distill_et_file, output_file, data_key, model_name, temperature, max_tokens):
     # 加载数据
-    with open(result_file, 'r') as f1:
-        data1 = json.load(f1)
     with open(distill_et_file, 'r') as f2:
-        data2 = json.load(f2)
-
-    # 确保两个文件的长度一致
-    if len(data1[data_key]) != len(data2[data_key]):
-        raise ValueError(f"两个文件的 '{data_key}' 数据长度不一致，无法比较！")
+        data = json.load(f2)
 
     # 初始化 vllm 模型和 tokenizer
     llm = LLM(model=model_name)
@@ -27,13 +21,7 @@ def generate_rationale(result_file, distill_et_file, output_file, data_key, mode
     updated_instructions = []
     updated_responses = []
 
-    for item1, item2 in zip(data1[data_key], data2[data_key]):
-        if item2["result"]["orig"]["is_correct"] == True:
-            if item1["result"]["orig"]["prediction"] == item2["result"]["orig"]["prediction"]:
-                continue
-        elif item2["result"]["swap"]["is_correct"] == True:
-            if item1["result"]["swap"]["prediction"] == item2["result"]["swap"]["prediction"]:
-                continue
+    for item2 in data[data_key]:
         if item2["result"]["orig"]["prediction"] == 1:
             chosen = "Output (a)"
             rejected = "Output (b)"
@@ -41,18 +29,11 @@ def generate_rationale(result_file, distill_et_file, output_file, data_key, mode
             chosen = "Output (b)"
             rejected = "Output (a)"
         else:
-            if item1["result"]["orig"]["prediction"] == 1:
-                chosen = "Output (a)"
-                rejected = "Output (b)"
-            elif item1["result"]["orig"]["prediction"] == 2:
-                chosen = "Output (b)"
-                rejected = "Output (a)"
-            else:
-                continue
+            continue
 
-        instruction = item1["instruction"]
-        response1 = item1["response1"]
-        response2 = item1["response2"]
+        instruction = item2["instruction"]
+        response1 = item2["response1"]
+        response2 = item2["response2"]
 
         if first == 0:
             if chosen == "Output (b)":
@@ -65,7 +46,7 @@ def generate_rationale(result_file, distill_et_file, output_file, data_key, mode
                 response1, response2 = response2, response1
             first = 0
 
-        updated_instructions.append(item1["instruction"])
+        updated_instructions.append(item2["instruction"])
         updated_responses.append((response1, response2))
 
         # 处理原始模型的结果
@@ -149,8 +130,6 @@ if __name__ == "__main__":
     # 使用 argparse 解析命令行参数
     parser = argparse.ArgumentParser(
         description="Use vllm to generate rationales and format the data.")
-    parser.add_argument("--result", type=str, required=True,
-                        help="Path to the original model results JSON file.")
     parser.add_argument("--result_distill_et", type=str, required=True,
                         help="Path to the Distill ET results JSON file.")
     parser.add_argument("--output", type=str, required=True,
@@ -169,7 +148,6 @@ if __name__ == "__main__":
 
     # 调用主函数
     generate_rationale(
-        result_file=args.result,
         distill_et_file=args.result_distill_et,
         output_file=args.output,
         data_key=args.data,
@@ -177,4 +155,5 @@ if __name__ == "__main__":
         temperature=args.temperature,
         max_tokens=args.max_tokens
     )
+
 
