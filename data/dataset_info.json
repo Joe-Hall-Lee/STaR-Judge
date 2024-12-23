@@ -160,6 +160,15 @@
             "response": "output",
             "system": "system"
         }
+    },
+    "arena_critique_distill": {
+        "file_name": "arena_critique_distill.json",
+        "columns": {
+            "prompt": "instruction",
+            "query": "input",
+            "response": "output",
+            "system": "system"
+        }
     }
 
 }
