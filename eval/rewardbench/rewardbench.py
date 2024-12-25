@@ -55,8 +55,6 @@ class Args:
     """The model to evaluate."""
     revision: Optional[str] = None
     """The model revision to evaluate."""
-    ref_model: Optional[str] = None
-    """The reference model to compare against."""
     tokenizer: Optional[str] = None
     """The tokenizer to use (defaults to model)."""
     chat_template: Optional[str] = None
@@ -259,27 +257,25 @@ def rewardbench(args: Args):
     # "custom_dialogue": False,
     # "model_type": "Seq. Classifier"
 
-    if not is_dpo:
-        # only Starling isn't quantized for now
-        quantized = config["quantized"]
-        # if llama-3 in name, switch quantized to False (severely degrades performance)
-        if (
-            ("llama-3" in args.model)
-            or ("Llama3" in args.model)
-            or ("Llama-3" in args.model)
-            or ("LLaMA3" in args.model)
-            or args.not_quantized
-        ):
-            quantized = False
-            logger.info(
-                f"Disabling quantization for llama-3 or override flag (--not_quantized: {args.not_quantized})")
-        custom_dialogue = config["custom_dialogue"]
-        pipeline_builder = config["pipeline_builder"]
-        _ = config["model_type"]
-        torch_dtype = config.get("torch_dtype", None)
-        if custom_dialogue:
-            raise NotImplementedError(
-                "Custom dialogue not implemented yet for simpler data formatting.")
+    quantized = config["quantized"]
+    # if llama-3 in name, switch quantized to False (severely degrades performance)
+    if (
+        ("llama-3" in args.model)
+        or ("Llama3" in args.model)
+        or ("Llama-3" in args.model)
+        or ("LLaMA3" in args.model)
+        or args.not_quantized
+    ):
+        quantized = False
+        logger.info(
+            f"Disabling quantization for llama-3 or override flag (--not_quantized: {args.not_quantized})")
+    custom_dialogue = config["custom_dialogue"]
+    pipeline_builder = config["pipeline_builder"]
+    _ = config["model_type"]
+    torch_dtype = config.get("torch_dtype", None)
+    if custom_dialogue:
+        raise NotImplementedError(
+            "Custom dialogue not implemented yet for simpler data formatting.")
 
     model_builder = config["model_builder"]
 
@@ -542,7 +538,6 @@ def rewardbench(args: Args):
             "accuracy": accuracy,
             "num_prompts": len(results),
             "model": args.model,
-            "ref_model": args.ref_model,
             "tokenizer": tokenizer_path,
             "chat_template": args.chat_template,
             "extra_results": results_grouped,

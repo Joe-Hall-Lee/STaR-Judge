@@ -135,4 +135,3 @@ SUBSET_NAME_TO_PAPER_READY = {
     "shp": "SHP",
     "summarize": "Summarize",
 }
-

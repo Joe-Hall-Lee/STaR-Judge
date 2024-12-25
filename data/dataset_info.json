@@ -21,8 +21,8 @@
             "system": "system"
         }
     },
-    "arena_rationale_distill": {
-	"file_name": "arena_rationale_distill.json",
+    "arena_cot_distill_verified": {
+	"file_name": "arena_cot_distill_verified.json",
         "columns": {
             "prompt": "instruction",
             "query": "input",

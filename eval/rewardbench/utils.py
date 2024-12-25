@@ -617,4 +617,3 @@ def load_model_config(model_name):
         return REWARD_MODEL_CONFIG[model_name]
     else:
         return REWARD_MODEL_CONFIG["default"]
-
