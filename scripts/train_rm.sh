@@ -2,19 +2,19 @@
 
 export NCCL_P2P_DISABLE=1
 export WANDB_MODE=offline
-export CUDA_VISIBLE_DEVICES=3,4
+export CUDA_VISIBLE_DEVICES=3,4,5,6
 
-dataset_name='data/webgpt_dpo.json'
-base_model='model/Llama-3.2-3B-Instruct'
+dataset_name='data/webgpt-dpo.json'
+base_model='model/Llama-3-8B-Instruct'
 log_dir='output'
 main_process_port=12541
 
-n_gpu=2
+n_gpu=4
 learning_rate=1e-5
 max_length=1024
 num_train_epochs=3
-per_device_train_batch_size=8
-gradient_accumulation_steps=8
+per_device_train_batch_size=4
+gradient_accumulation_steps=4
 
 accelerate launch --num_processes ${n_gpu} \
     --main_process_port ${main_process_port} \

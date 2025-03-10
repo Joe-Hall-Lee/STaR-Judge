@@ -51,7 +51,7 @@
     "arena_sft": {
         "file_name": "arena_sft.json"
     },
-    "arena_dpo": {
+    "arena-dpo": {
         "file_name": "arena_dpo.json",
         "ranking": true,
         "columns": {
